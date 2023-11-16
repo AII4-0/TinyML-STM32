@@ -1,0 +1,6 @@
+[submodule "tsad-benchmark"]
+	path = tsad-benchmark
+	url = git@github.com:AII4-0/tsad-benchmark.git
+[submodule "tflite-micro"]
+	path = tflite-micro
+	url = git@github.com:tensorflow/tflite-micro.git
