@@ -39,7 +39,7 @@ python3 main.py --dataset NASA-MSL --batch_size 1024 --window_size 100 --model L
 python3 convert_to_tflite.py --dataset NASA-MSL --entity 0 --window_size 100 --model ../output/lstm_0.pt
 
 # Test the model exported in TFLite
-python3 check_tflite_model.py --dataset NASA-MSL --entity 0 --window_size 100 --pytorch_model ../output/lstm_0.pt --tflite_model ../output/lstm_0.tflite --n_inputs_exported_in_c 200
+python3 check_tflite_model.py --dataset NASA-MSL --entity 0 --window_size 100 --pytorch_model ../output/lstm_0.pt --tflite_model ../output/lstm_0.tflite --n_inputs_exported_in_c 500
 
 cd ..
 ```
