@@ -42,7 +42,7 @@ python3 convert_to_tflite.py --dataset NASA-MSL --entity 0 --window_size 100 --m
 python3 check_tflite_model.py --dataset NASA-MSL --entity 0 --window_size 100 --pytorch_model ../output/lstm_0.pt --tflite_model ../output/lstm_0.tflite --n_inputs_exported_in_c 500
 
 # Test the model exported into quantized tf lite model
-python3 check_tflite_model.py --dataset NASA-MSL --entity 0 --window_size 100 --pytorch_model ../output/lstm_0.pt --tflite_model ../output/lstm_0_quant.tflite --n_inputs_exported_in_c 500
+python3 check_tflite_model.py --dataset NASA-MSL --entity 0 --window_size 100 --pytorch_model ../output/lstm_0.pt --tflite_model ../output/lstm_0_quant.tflite --start_index_inputs_exported_in_c 400 --n_inputs_exported_in_c 100
 
 
 cd ..
