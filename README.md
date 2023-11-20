@@ -140,3 +140,5 @@ python3 tensorflow/lite/micro/tools/project_generation/create_tflm_tree.py \
     }  // namespace tflite
     ```
 16. Build the project
+17. If the flash is too small, add the optimization for size :
+    ![Alt text](docs/images/optimize.png)
