@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#define RUN_INFERENCE	// Choose RUN_INFERENCE or BASELINE_MEMORY_FOOTPRINT or PROFILE_MEMORY_AND_LATENCY
+#define PROFILE_MEMORY_AND_LATENCY	// Choose RUN_INFERENCE or BASELINE_MEMORY_FOOTPRINT or PROFILE_MEMORY_AND_LATENCY
 
 #if defined( RUN_INFERENCE ) || defined( PROFILE_MEMORY_AND_LATENCY )
 	#include "tensorflow/lite/core/c/common.h"
@@ -35,7 +35,6 @@
 	#include "tensorflow/lite/micro/micro_utils.h"
 
 	#include "lstm_0_quant.h"
-	#include "tensorflow_model_lcnn_quant.h"
 	#include "C_1_test.h"
 
 #elif defined( BASELINE_MEMORY_FOOTPRINT )
@@ -52,7 +51,7 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 #if defined( PROFILE_MEMORY_AND_LATENCY ) || defined( RUN_INFERENCE )
-	#define TENSOR_ARENA_SIZE (20 * 1024)
+	#define TENSOR_ARENA_SIZE (40 * 1024)
 	#define N_SAMPLE_PER_INPUT 100
 #endif
 
@@ -320,16 +319,15 @@ static void MX_GPIO_Init(void)
 		}
 
 		// Resolver
-		tflite::MicroMutableOpResolver<7> micro_op_resolver;
+		tflite::MicroMutableOpResolver<6> micro_op_resolver;
 
 		// Add dense neural network layer operation
-//		micro_op_resolver.AddFullyConnected();
-//		micro_op_resolver.AddQuantize();
-//		micro_op_resolver.AddConv2D();
-//		micro_op_resolver.AddMaxPool2D();
-//		micro_op_resolver.AddReshape();
-//		micro_op_resolver.AddSoftmax();
-//		micro_op_resolver.AddDequantize();
+		micro_op_resolver.AddFullyConnected();
+		micro_op_resolver.AddQuantize();
+		micro_op_resolver.AddUnidirectionalSequenceLSTM();
+		micro_op_resolver.AddStridedSlice();
+		micro_op_resolver.AddReshape();
+		micro_op_resolver.AddDequantize();
 
 		// Build an interpreter to run the model with.
 		tflite::MicroInterpreter interpreter(model, micro_op_resolver, tensor_arena,
@@ -387,13 +385,7 @@ static void MX_GPIO_Init(void)
 
 		for(int iInference = 0; iInference < nInference ; iInference++)
 		{
-//		  for (int i = 0; i < N_SAMPLE_PER_INPUT; i++)
-//		  {
-//			// It's necessary to preprocess the data as we did during the training (python notebook).
-//			model_input->data.f[i*3] = (vdset_off[0][i + (iInference*N_SAMPLE_PER_INPUT)] - model_mean[0]) / model_std[0];
-//			model_input->data.f[(i*3)+1] = (vdset_off[1][i + (iInference*N_SAMPLE_PER_INPUT)] - model_mean[1]) / model_std[1];
-//			model_input->data.f[(i*3)+2] = (vdset_off[2][i + (iInference*N_SAMPLE_PER_INPUT)] - model_mean[2]) / model_std[2];
-//		  }
+		  // Copy test data into the input model
 		  memcpy(model_input->data.f, C_1_test[iInference], C_1_test_window_size * C_1_test_dimension);
 
 		  uint32_t atimeStart = HAL_GetTick();
@@ -431,20 +423,18 @@ static void MX_GPIO_Init(void)
 		constexpr int kNumResourceVariables = 24;
 
 		// Resolver
-		tflite::MicroMutableOpResolver<7> op_resolver;
+		tflite::MicroMutableOpResolver<6> op_resolver;
 
 		// Add dense neural network layer operation
 		op_resolver.AddFullyConnected();
 		op_resolver.AddQuantize();
-		op_resolver.AddConv2D();
-		op_resolver.AddMaxPool2D();
+		op_resolver.AddUnidirectionalSequenceLSTM();
+		op_resolver.AddStridedSlice();
 		op_resolver.AddReshape();
-		op_resolver.AddSoftmax();
 		op_resolver.AddDequantize();
 
-
 		// Model
-		const tflite::Model* model = tflite::GetModel(tensorflow_model_lcnn_quant);
+		const tflite::Model* model = tflite::GetModel(lstm_0_quant);
 		if (model->version() != TFLITE_SCHEMA_VERSION)
 		{
 		MicroPrintf(
@@ -486,15 +476,11 @@ static void MX_GPIO_Init(void)
 		// Perform inference
 		//****************************************************
 
-		for (int i = 0; i < N_SAMPLE_PER_INPUT; i++)
-		{
-			// It's necessary to preprocess the data as we did during the training (python notebook).
-			model_input->data.f[i*3] = (vdset_off[0][i] - model_mean[0]) / model_std[0];
-			model_input->data.f[(i*3)+1] = (vdset_off[1][i] - model_mean[1]) / model_std[1];
-			model_input->data.f[(i*3)+2] = (vdset_off[2][i] - model_mean[2]) / model_std[2];
-		}
+		// Copy test data into the input model
+		memcpy(model_input->data.f, C_1_test[0], C_1_test_window_size * C_1_test_dimension);
 
 		uint32_t atimeStart = HAL_GetTick();
+
 		// Infer
 		TfLiteStatus invoke_status = interpreter.Invoke();
 		if (invoke_status != kTfLiteOk)

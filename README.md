@@ -33,16 +33,16 @@ pip install -r tsad-benchmark/requirements/requirements_tflite.txt
 cd tsad-benchmark
 
 # Prepare data, train the mode and export it
-python3 main.py --dataset NASA-MSL --batch_size 256 --window_size 100 --model Transformer --epochs 10 --dropout 0.1 --prediction_length 1 --learning_rate 0.001 --num_encoder_layers 3 --num_decoder_layers 3 --export_folder ../output
+python3 main.py --dataset NASA-MSL --batch_size 1024 --window_size 100 --model LSTM --epochs 10 --hidden_size 256 --num_layers 2 --dropout 0 --prediction_length 1 --learning_rate 0.001 --export_folder ../output
 
 # Convert the exported model into TFLite model
-python3 convert_to_tflite.py --dataset NASA-MSL --entity 0 --window_size 100 --model ../output/transformer_0.pt
+python3 convert_to_tflite.py --dataset NASA-MSL --entity 0 --window_size 100 --model ../output/lstm_0.pt
 
 # Test the model exported in TFLite
-python3 check_tflite_model.py --dataset NASA-MSL --entity 0 --window_size 100 --pytorch_model ../output/transformer_0.pt --tflite_model ../output/transformer_0.tflite --start_index_inputs_exported_in_c 400 --n_inputs_exported_in_c 100
+python3 check_tflite_model.py --dataset NASA-MSL --entity 0 --window_size 100 --pytorch_model ../output/lstm_0.pt --tflite_model ../output/lstm_0.tflite --start_index_inputs_exported_in_c 400 --n_inputs_exported_in_c 100
 
 # Test the model exported into quantized tf lite model
-python3 check_tflite_model.py --dataset NASA-MSL --entity 0 --window_size 100 --pytorch_model ../output/transformer_0.pt --tflite_model ../output/transformer_0_quant.tflite --start_index_inputs_exported_in_c 400 --n_inputs_exported_in_c 100
+python3 check_tflite_model.py --dataset NASA-MSL --entity 0 --window_size 100 --pytorch_model ../output/lstm_0.pt --tflite_model ../output/lstm_0_quant.tflite --start_index_inputs_exported_in_c 400 --n_inputs_exported_in_c 100
 
 
 cd ..
@@ -54,7 +54,7 @@ cd ..
 ```bash
 cd tflite-micro
 python3 tensorflow/lite/micro/tools/project_generation/create_tflm_tree.py \
-  --makefile_options="TARGET=cortex_m_generic OPTIMIZED_KERNEL_DIR=cmsis_nn TARGET_ARCH=project_generation" \
+  --makefile_options="OPTIMIZED_KERNEL_DIR=cmsis_nn TARGET_ARCH=project_generation" \
   /tmp/tflm-tree
 ```
 
@@ -139,6 +139,7 @@ python3 tensorflow/lite/micro/tools/project_generation/create_tflm_tree.py \
 
     }  // namespace tflite
     ```
+16. Rename main.c to main.cpp
 16. Build the project
 17. If the flash is too small, add the optimization for size :
     ![Alt text](docs/images/optimize.png)

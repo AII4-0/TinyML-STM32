@@ -1,6 +1,7 @@
 #include "tensorflow/lite/micro/micro_time.h"
 #include "stm32f4xx_hal.h"
 
+
 #if defined(TF_LITE_USE_CTIME)
 #include <ctime>
 #endif
@@ -15,7 +16,7 @@ namespace tflite {
 // without errors on platforms that do not need it.
 uint32_t ticks_per_second()
 {
-	return 1000;
+    return 1000;
 }
 
 // Reference implementation of the GetCurrentTimeTicks() function that's
@@ -24,7 +25,7 @@ uint32_t ticks_per_second()
 // that builds without errors on platforms that do not need it.
 uint32_t GetCurrentTimeTicks()
 {
-	return HAL_GetTick();		// Return the number of ticks. 1 tick == 1ms
+    return HAL_GetTick();		// Return the number of ticks. 1 tick == 1ms
 }
 
 #else  // defined(TF_LITE_USE_CTIME)
