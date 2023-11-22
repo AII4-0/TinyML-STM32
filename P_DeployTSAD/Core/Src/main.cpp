@@ -21,7 +21,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#define PROFILE_MEMORY_AND_LATENCY	// Choose RUN_INFERENCE or BASELINE_MEMORY_FOOTPRINT or PROFILE_MEMORY_AND_LATENCY
+#define RUN_INFERENCE	// Choose RUN_INFERENCE or BASELINE_MEMORY_FOOTPRINT or PROFILE_MEMORY_AND_LATENCY
+#define GAN_QUANT				//Choose between LSTM_QUANT, GAN or GAN_QUANT
 
 #if defined( RUN_INFERENCE ) || defined( PROFILE_MEMORY_AND_LATENCY )
 	#include "tensorflow/lite/core/c/common.h"
@@ -35,6 +36,9 @@
 	#include "tensorflow/lite/micro/micro_utils.h"
 
 	#include "lstm_0_quant.h"
+	#include "lstm_0.h"
+	#include "gan_0_quant.h"
+	#include "gan_0.h"
 	#include "C_1_test.h"
 
 #elif defined( BASELINE_MEMORY_FOOTPRINT )
@@ -308,7 +312,13 @@ static void MX_GPIO_Init(void)
 		MicroPrintf("You are in inference mode\r\n\r\n");
 
 		// Model
+#if defined(LSTM_QUANT)
 		const tflite::Model* model = tflite::GetModel(lstm_0_quant);
+#elif defined(GAN_QUANT)
+		const tflite::Model* model = tflite::GetModel(gan_0_quant);
+#elif defined(GAN)
+		const tflite::Model* model = tflite::GetModel(gan_0);
+#endif
 		if (model->version() != TFLITE_SCHEMA_VERSION)
 		{
 		MicroPrintf(
@@ -318,6 +328,7 @@ static void MX_GPIO_Init(void)
 		return kTfLiteError;
 		}
 
+#if defined(LSTM_QUANT)
 		// Resolver
 		tflite::MicroMutableOpResolver<6> micro_op_resolver;
 
@@ -328,6 +339,25 @@ static void MX_GPIO_Init(void)
 		micro_op_resolver.AddStridedSlice();
 		micro_op_resolver.AddReshape();
 		micro_op_resolver.AddDequantize();
+#elif defined(GAN_QUANT)
+		// Resolver
+		tflite::MicroMutableOpResolver<5> micro_op_resolver;
+
+		// Add dense neural network layer operation
+		micro_op_resolver.AddFullyConnected();
+		micro_op_resolver.AddLogistic();
+		micro_op_resolver.AddQuantize();
+		micro_op_resolver.AddReshape();
+		micro_op_resolver.AddDequantize();
+#elif defined(GAN)
+		// Resolver
+		tflite::MicroMutableOpResolver<3> micro_op_resolver;
+
+		// Add dense neural network layer operation
+		micro_op_resolver.AddFullyConnected();
+		micro_op_resolver.AddLogistic();
+		micro_op_resolver.AddReshape();
+#endif
 
 		// Build an interpreter to run the model with.
 		tflite::MicroInterpreter interpreter(model, micro_op_resolver, tensor_arena,
@@ -422,6 +452,7 @@ static void MX_GPIO_Init(void)
 		tflite::MicroProfiler profiler;
 		constexpr int kNumResourceVariables = 24;
 
+#if defined(LSTM_QUANT)
 		// Resolver
 		tflite::MicroMutableOpResolver<6> op_resolver;
 
@@ -432,9 +463,34 @@ static void MX_GPIO_Init(void)
 		op_resolver.AddStridedSlice();
 		op_resolver.AddReshape();
 		op_resolver.AddDequantize();
+#elif defined(GAN_QUANT)
+		// Resolver
+		tflite::MicroMutableOpResolver<5> op_resolver;
+
+		// Add dense neural network layer operation
+		op_resolver.AddFullyConnected();
+		op_resolver.AddLogistic();
+		op_resolver.AddQuantize();
+		op_resolver.AddReshape();
+		op_resolver.AddDequantize();
+#elif defined(GAN)
+		// Resolver
+		tflite::MicroMutableOpResolver<3> op_resolver;
+
+		// Add dense neural network layer operation
+		op_resolver.AddFullyConnected();
+		op_resolver.AddLogistic();
+		op_resolver.AddReshape();
+#endif
 
 		// Model
+#if defined(LSTM_QUANT)
 		const tflite::Model* model = tflite::GetModel(lstm_0_quant);
+#elif defined(GAN_QUANT)
+		const tflite::Model* model = tflite::GetModel(gan_0_quant);
+#elif defined(GAN)
+		const tflite::Model* model = tflite::GetModel(gan_0);
+#endif
 		if (model->version() != TFLITE_SCHEMA_VERSION)
 		{
 		MicroPrintf(
