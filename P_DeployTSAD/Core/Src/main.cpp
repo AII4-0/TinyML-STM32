@@ -22,7 +22,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #define RUN_INFERENCE	// Choose RUN_INFERENCE or BASELINE_MEMORY_FOOTPRINT or PROFILE_MEMORY_AND_LATENCY
-#define LSTM_QUANT				//Choose between LSTM_QUANT, GAN or GAN_QUANT
+#define GAN_QUANT		//Choose between LSTM_0_QUANT, LSTM_1_QUANT GAN or GAN_QUANT
 
 #if defined( RUN_INFERENCE ) || defined( PROFILE_MEMORY_AND_LATENCY )
 	#include "tensorflow/lite/core/c/common.h"
@@ -37,9 +37,12 @@
 
 	#include "lstm_0_quant.h"
 	#include "lstm_0.h"
+	#include "lstm_1_quant.h"
+	#include "lstm_1.h"
 	#include "gan_0_quant.h"
 	#include "gan_0.h"
 	#include "C_1_test.h"
+	#include "C_2_test.h"
 
 #elif defined( BASELINE_MEMORY_FOOTPRINT )
 	#include <stdio.h>
@@ -312,8 +315,10 @@ static void MX_GPIO_Init(void)
 		MicroPrintf("You are in inference mode\r\n\r\n");
 
 		// Model
-#if defined(LSTM_QUANT)
+#if defined(LSTM_0_QUANT)
 		const tflite::Model* model = tflite::GetModel(lstm_0_quant);
+#elif defined(LSTM_1_QUANT)
+		const tflite::Model* model = tflite::GetModel(lstm_1_quant);
 #elif defined(GAN_QUANT)
 		const tflite::Model* model = tflite::GetModel(gan_0_quant);
 #elif defined(GAN)
@@ -328,7 +333,7 @@ static void MX_GPIO_Init(void)
 		return kTfLiteError;
 		}
 
-#if defined(LSTM_QUANT)
+#if defined(LSTM_0_QUANT) || defined (LSTM_1_QUANT)
 		// Resolver
 		tflite::MicroMutableOpResolver<6> micro_op_resolver;
 
@@ -411,12 +416,16 @@ static void MX_GPIO_Init(void)
 		// Perform inference
 		//****************************************************
 
-		nInference = C_1_test_nInputs; //vdset_off_samples / N_SAMPLE_PER_INPUT;  // For vdset_on[3][25600] / 1024, the number of inference is : 25
+		nInference = C_1_test_nInputs;
 
 		for(int iInference = 0; iInference < nInference ; iInference++)
 		{
 		  // Copy test data into the input model
-		  memcpy(model_input->data.f, C_1_test[iInference], C_1_test_window_size * C_1_test_dimension);
+#if defined(LSTM_1_QUANT)
+		  memcpy(model_input->data.f, C_2_test[iInference], (C_2_test_window_size - 1) * C_2_test_dimension);
+#else
+		  memcpy(model_input->data.f, C_1_test[iInference], (C_1_test_window_size - 1) * C_1_test_dimension);
+#endif
 
 		  uint32_t atimeStart = HAL_GetTick();
 
@@ -452,7 +461,7 @@ static void MX_GPIO_Init(void)
 		tflite::MicroProfiler profiler;
 		constexpr int kNumResourceVariables = 24;
 
-#if defined(LSTM_QUANT)
+#if defined(LSTM_0_QUANT) || defined(LSTM_1_QUANT)
 		// Resolver
 		tflite::MicroMutableOpResolver<6> op_resolver;
 
@@ -484,8 +493,10 @@ static void MX_GPIO_Init(void)
 #endif
 
 		// Model
-#if defined(LSTM_QUANT)
+#if defined(LSTM_0_QUANT)
 		const tflite::Model* model = tflite::GetModel(lstm_0_quant);
+#elif defined(LSTM_1_QUANT)
+		const tflite::Model* model = tflite::GetModel(lstm_1_quant);
 #elif defined(GAN_QUANT)
 		const tflite::Model* model = tflite::GetModel(gan_0_quant);
 #elif defined(GAN)
@@ -533,7 +544,11 @@ static void MX_GPIO_Init(void)
 		//****************************************************
 
 		// Copy test data into the input model
-		memcpy(model_input->data.f, C_1_test[0], C_1_test_window_size * C_1_test_dimension);
+#if defined(LSTM_1_QUANT)
+		  memcpy(model_input->data.f, C_2_test[0], (C_2_test_window_size - 1) * C_2_test_dimension);
+#else
+		  memcpy(model_input->data.f, C_1_test[0], (C_1_test_window_size - 1) * C_1_test_dimension);
+#endif
 
 		uint32_t atimeStart = HAL_GetTick();
 
