@@ -22,7 +22,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #define RUN_INFERENCE	// Choose RUN_INFERENCE or BASELINE_MEMORY_FOOTPRINT or PROFILE_MEMORY_AND_LATENCY
-#define GAN_QUANT				//Choose between LSTM_QUANT, GAN or GAN_QUANT
+#define LSTM_QUANT				//Choose between LSTM_QUANT, GAN or GAN_QUANT
 
 #if defined( RUN_INFERENCE ) || defined( PROFILE_MEMORY_AND_LATENCY )
 	#include "tensorflow/lite/core/c/common.h"

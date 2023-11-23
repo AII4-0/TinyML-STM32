@@ -22,7 +22,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#define PROFILE_MEMORY_AND_LATENCY 	// Choose RUN_INFERENCE or BASELINE_MEMORY_FOOTPRINT or PROFILE_MEMORY_AND_LATENCY
+#define RUN_INFERENCE	 	// Choose RUN_INFERENCE or BASELINE_MEMORY_FOOTPRINT or PROFILE_MEMORY_AND_LATENCY
+#define LSTM_QUANT				//Choose between LSTM, LSTM_QUANT or GAN
 
 #if defined( RUN_INFERENCE ) || defined( PROFILE_MEMORY_AND_LATENCY )
 	#include "tensorflow/lite/core/c/common.h"
@@ -37,6 +38,8 @@
 
 	#include "gan_0.h"
 	#include "C_1_test.h"
+	#include "lstm_0.h"
+	#include "lstm_1_quant.h"
 
 #elif defined( BASELINE_MEMORY_FOOTPRINT )
 	#include <stdio.h>
@@ -53,7 +56,7 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 #if defined( PROFILE_MEMORY_AND_LATENCY ) || defined( RUN_INFERENCE )
-	#define TENSOR_ARENA_SIZE (250 * 1024)
+	#define TENSOR_ARENA_SIZE (80 * 1024)
 	#define N_SAMPLE_PER_INPUT 100
 #endif
 
@@ -451,7 +454,13 @@ static void MX_GPIO_Init(void)
 		MicroPrintf("You are in inference mode\r\n\r\n");
 
 		// Model
+#if defined(LSTM)
+		const tflite::Model* model = tflite::GetModel(lstm_0);
+#elif defined(LSTM_QUANT)
+		const tflite::Model* model = tflite::GetModel(lstm_1_quant);
+#elif defined(GAN)
 		const tflite::Model* model = tflite::GetModel(gan_0);
+#endif
 		if (model->version() != TFLITE_SCHEMA_VERSION)
 		{
 		MicroPrintf(
@@ -461,6 +470,27 @@ static void MX_GPIO_Init(void)
 		return kTfLiteError;
 		}
 
+#if defined(LSTM)
+		// Resolver
+		tflite::MicroMutableOpResolver<4> micro_op_resolver;
+
+		// Add dense neural network layer operation
+		micro_op_resolver.AddFullyConnected();
+		micro_op_resolver.AddUnidirectionalSequenceLSTM();
+		micro_op_resolver.AddStridedSlice();
+		micro_op_resolver.AddReshape();
+#elif defined(LSTM_QUANT)
+		// Resolver
+		tflite::MicroMutableOpResolver<6> micro_op_resolver;
+
+		// Add dense neural network layer operation
+		micro_op_resolver.AddFullyConnected();
+		micro_op_resolver.AddQuantize();
+		micro_op_resolver.AddUnidirectionalSequenceLSTM();
+		micro_op_resolver.AddStridedSlice();
+		micro_op_resolver.AddReshape();
+		micro_op_resolver.AddDequantize();
+#elif defined(GAN)
 		// Resolver
 		tflite::MicroMutableOpResolver<3> micro_op_resolver;
 
@@ -468,6 +498,7 @@ static void MX_GPIO_Init(void)
 		micro_op_resolver.AddFullyConnected();
 		micro_op_resolver.AddLogistic();
 		micro_op_resolver.AddReshape();
+#endif
 
 		// Build an interpreter to run the model with.
 		tflite::MicroInterpreter interpreter(model, micro_op_resolver, tensor_arena,
@@ -562,6 +593,28 @@ static void MX_GPIO_Init(void)
 		tflite::MicroProfiler profiler;
 		constexpr int kNumResourceVariables = 24;
 
+
+#if defined(LSTM)
+		// Resolver
+		tflite::MicroMutableOpResolver<4> op_resolver;
+
+		// Add dense neural network layer operation
+		op_resolver.AddFullyConnected();
+		op_resolver.AddUnidirectionalSequenceLSTM();
+		op_resolver.AddStridedSlice();
+		op_resolver.AddReshape();
+#elif defined(LSTM_QUANT)
+		// Resolver
+		tflite::MicroMutableOpResolver<6> micro_op_resolver;
+
+		// Add dense neural network layer operation
+		micro_op_resolver.AddFullyConnected();
+		micro_op_resolver.AddQuantize();
+		micro_op_resolver.AddUnidirectionalSequenceLSTM();
+		micro_op_resolver.AddStridedSlice();
+		micro_op_resolver.AddReshape();
+		micro_op_resolver.AddDequantize();
+#elif defined(GAN)
 		// Resolver
 		tflite::MicroMutableOpResolver<3> op_resolver;
 
@@ -569,9 +622,16 @@ static void MX_GPIO_Init(void)
 		op_resolver.AddFullyConnected();
 		op_resolver.AddLogistic();
 		op_resolver.AddReshape();
+#endif
 
 		// Model
+#if defined(LSTM)
+		const tflite::Model* model = tflite::GetModel(lstm_0);
+#elif defined(LSTM_QUANT)
+		const tflite::Model* model = tflite::GetModel(lstm_1_quant);
+#elif defined(GAN)
 		const tflite::Model* model = tflite::GetModel(gan_0);
+#endif
 		if (model->version() != TFLITE_SCHEMA_VERSION)
 		{
 		MicroPrintf(
@@ -614,7 +674,7 @@ static void MX_GPIO_Init(void)
 		//****************************************************
 
 		// Copy test data into the input model
-		memcpy(model_input->data.f, C_1_test[0], C_1_test_window_size * C_1_test_dimension);
+		memcpy(model_input->data.f, C_1_test[0], (C_1_test_window_size - 1) * C_1_test_dimension);
 
 		uint32_t atimeStart = HAL_GetTick();
 		// Infer
