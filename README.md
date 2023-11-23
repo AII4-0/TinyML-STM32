@@ -10,23 +10,24 @@ Versions tested :
 
 To test inference on a Nucleo board, follow the instructions below :
 1. Clone the repo :
-```bash
-git clone --recursive git@github.com:AII4-0/TinyML-STM32.git
-```
-2. Open STM32CubeIDE and open as workspace the repo cloned.
-3. Import the project as following :
+
+    ```bash
+    git clone --recursive git@github.com:AII4-0/TinyML-STM32.git
+    ```
+3. Open STM32CubeIDE and open as workspace the repo cloned.
+4. Import the project as following :
     1. File > Import > General > Existing Projects into Workspace
     2. Next
     3. Browse and select P_DeployTSAD (Nucleo-F411RE) or P_DeployTSAD_h7 (Nucleo-H7A3ZI-Q) folder.
     4. Finish
-4. Build the project with the hammer.
-5. Connect the Nucleo via an USB cable to your PC.
-6. Open a terminal or putty to open a virtual serial port where the Nucleo is connected. Set the baudrate to 9600.
+5. Build the project with the hammer.
+6. Connect the Nucleo via an USB cable to your PC.
+7. Open a terminal or putty to open a virtual serial port where the Nucleo is connected. Set the baudrate to 9600.
     
     ![Alt text](docs/images/portcom.png)
 
-7. In the STM32CubeIDE, start debugging.
-8. You can change the configuration if you change the define below in the main.cpp file.
+8. In the STM32CubeIDE, start debugging.
+9. You can change the configuration if you change the define below in the main.cpp file.
     ```cpp
     /* Private includes ----------------------------------------------------------*/
     /* USER CODE BEGIN Includes */
