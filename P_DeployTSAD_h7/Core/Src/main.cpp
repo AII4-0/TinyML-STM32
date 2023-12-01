@@ -43,6 +43,7 @@
 	#include "gan_0_quant.h"
 	#include "gan_0.h"
 	#include "C_1_test.h"
+//	#include "C_1_test_400.h"
 	#include "C_2_test.h"
 
 #elif defined( BASELINE_MEMORY_FOOTPRINT )
@@ -561,7 +562,7 @@ static void MX_GPIO_Init(void)
 
 		nInference = C_1_test_nInputs; //vdset_off_samples / N_SAMPLE_PER_INPUT;  // For vdset_on[3][25600] / 1024, the number of inference is : 25
 
-		for(int iInference = 0; iInference < nInference ; iInference++)
+		for(int iInference = 1; iInference < nInference ; iInference++)
 		{
 		  // Copy test data into the input model
 #if defined(LSTM_1_QUANT)
