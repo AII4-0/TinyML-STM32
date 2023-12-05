@@ -76,7 +76,11 @@ int main(int argc, char* argv[]) {
   }
 
   printf("First input value : %f\n", C_1_test[index][0][0]);
-  memcpy(input->data.f, C_1_test[index], (C_1_test_nInputs - 1) * C_1_test_dimension);
+  // memcpy(input->data.f, C_1_test[index][0], (C_1_test_nInputs - 1) * C_1_test_dimension);
+  for(int i=0; i<100;i++)
+  {
+    input->data.f[i] = C_1_test[index][i][0];
+  }
 
   // Run inference
   TFLITE_MINIMAL_CHECK(interpreter->Invoke() == kTfLiteOk);
