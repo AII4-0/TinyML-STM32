@@ -1,0 +1,9 @@
+{
+    "editor.minimap.enabled": false,
+    "editor.multiCursorModifier": "ctrlCmd",
+    "notebook.lineNumbers": "on",
+    "cmake.debugConfig": {
+
+        "args": ["../../output/gan_0_quant.tflite", "0"]
+    }
+}

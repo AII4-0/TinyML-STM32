@@ -113,6 +113,34 @@ This installation is tested on Ubuntu20.04 with python3.9 installed.
     cd ..
     ```
 
+## 2 Test TFLite model on the host
+
+The tsad-benchmark repo test the TFLite model with the python framework. A good practice is to test the TFLite model on the host with the TFLite C++ framework. It's based on the minimal example [here](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/lite/examples/minimal).
+
+Follow the procedure below to test the model.
+
+1. Install CMake 3.16 or higher
+    ```bash
+    sudo apt-get install cmake
+    ```
+2. Generate and compile the test program to test the model.
+    ```bash
+    cd P_DeployTSAD_host_in_C
+    mkdir build
+    cd build
+
+    cmake ../
+    cmake --build . -j
+    ```
+3. Test the model
+    ```bash
+    # ./minimal <model> <index to start inference in C_1_test_400.h>
+    ./minimal ../../output/gan_0_quant.tflite 0
+    ```
+4. The result must be the same as the result of the `tsad-benchmark/check_tflite_model.py` scipt.
+
+
+
 ## 2 Generate the TFLiteMicro library for the embedded system
 
 1. Generate the source tree

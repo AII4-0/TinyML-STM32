@@ -4,3 +4,6 @@
 [submodule "tflite-micro"]
 	path = tflite-micro
 	url = git@github.com:tensorflow/tflite-micro.git
+[submodule "tensorflow_src"]
+	path = tensorflow_src
+	url = https://github.com/tensorflow/tensorflow.git
