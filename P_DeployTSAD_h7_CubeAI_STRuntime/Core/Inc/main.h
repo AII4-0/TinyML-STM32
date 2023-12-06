@@ -91,6 +91,7 @@ void Error_Handler(void);
 #define LD2_GPIO_Port GPIOE
 
 /* USER CODE BEGIN Private defines */
+#define NUMBER_OF_INPUT_INFERENCE 100
 
 /* USER CODE END Private defines */
 

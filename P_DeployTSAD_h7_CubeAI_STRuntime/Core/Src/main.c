@@ -62,6 +62,13 @@ static void MX_USB_OTG_HS_USB_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+// Needed to use printf. If printf don't want be used, redefine the function "DebugLog" in file "tensorflow/lite/micro/debug_log.cc"
+// This function is used by tensorflow to print some info.
+int __io_putchar(int ch)
+{
+	HAL_UART_Transmit(&huart3, (uint8_t*) &ch, 1, HAL_MAX_DELAY);
+	return ch;
+}
 
 /* USER CODE END 0 */
 

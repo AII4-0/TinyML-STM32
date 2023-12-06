@@ -58,6 +58,7 @@
 #include "network_1701866511190_data.h"
 
 /* USER CODE BEGIN includes */
+#include "C_1_test.h"
 /* USER CODE END includes */
 
 /* IO buffers ----------------------------------------------------------------*/
@@ -171,25 +172,56 @@ static int ai_run(void)
 /* USER CODE BEGIN 2 */
 int acquire_and_process_data(ai_i8* data[])
 {
-  /* fill the inputs of the c-model
-  for (int idx=0; idx < AI_NETWORK_1701866511190_IN_NUM; idx++ )
+	static iInput = 0;
+
+  /* fill the inputs of the c-model */
+  for (int i=0; i < AI_NETWORK_1701866511190_IN_NUM; i++ )
   {
-      data[idx] = ....
+	  const ai_buffer_format fmt = AI_BUFFER_FORMAT(&ai_input[i]);
+
+	  for (ai_size j = 0; j < ai_input[i].size; ++j)
+	  {
+		if  (AI_BUFFER_FMT_GET_TYPE(fmt) == AI_BUFFER_FMT_TYPE_FLOAT)
+		{
+			const float v = C_1_test[iInput][j][0];
+			*(ai_float *)(data[i] + j * 4) = v;		// Store data into input tensor. j * 4, because int8 in input (4bytes == float).
+		}
+	  }
   }
 
-  */
+  if(++iInput >= NUMBER_OF_INPUT_INFERENCE)
+  {
+	  iInput = 0;
+  }
+
   return 0;
 }
 
 int post_process(ai_i8* data[])
 {
-  /* process the predictions
-  for (int idx=0; idx < AI_NETWORK_1701866511190_OUT_NUM; idx++ )
-  {
-      data[idx] = ....
-  }
+  /* process the predictions */
+	static iOutput = 0;
+	float outputData[1];
 
-  */
+	/* Fill output tensors with output data */
+	for (int i = 0; i < AI_NETWORK_1701866511190_OUT_NUM; i++)
+	{
+		const ai_buffer_format fmt = AI_BUFFER_FORMAT(&ai_output[i]);
+
+		for (ai_size j = 0; j < ai_output[i].size; ++j)
+		{
+			if  (AI_BUFFER_FMT_GET_TYPE(fmt) == AI_BUFFER_FMT_TYPE_FLOAT)
+			{
+				outputData[j] = *(ai_float *)(data[i] + j * 4); // Store output tensor into output data.
+			}
+		}
+	}
+
+	if(iOutput < NUMBER_OF_INPUT_INFERENCE)
+	{
+		printf("Inference result %d : %f \r\n", iOutput++, outputData[0]);
+	}
+
   return 0;
 }
 /* USER CODE END 2 */
@@ -209,6 +241,7 @@ void MX_X_CUBE_AI_Process(void)
 {
     /* USER CODE BEGIN 6 */
   int res = -1;
+  static uint32_t iProcess = 0;
 
   printf("TEMPLATE - run - main loop\r\n");
 
@@ -219,7 +252,14 @@ void MX_X_CUBE_AI_Process(void)
       res = acquire_and_process_data(data_ins);
       /* 2 - process the data - call inference engine */
       if (res == 0)
+      {
+    	uint32_t atimeStart = HAL_GetTick();
         res = ai_run();
+        uint32_t atimeStop = HAL_GetTick();
+
+        if( iProcess++ < NUMBER_OF_INPUT_INFERENCE )
+        	printf("Time measured manually for inference : %d ms\r\n", atimeStop - atimeStart);
+      }
       /* 3- post-process the predictions */
       if (res == 0)
         res = post_process(data_outs);
