@@ -92,9 +92,10 @@ static void MX_GPIO_Init(void);
 static void MX_USART3_UART_Init(void);
 static void MX_USB_OTG_HS_USB_Init(void);
 static void MX_CRC_Init(void);
-static void debug_log_printf(const char* s);
 
 /* USER CODE BEGIN PFP */
+static void debug_log_printf(const char* s);
+
 #ifdef RUN_INFERENCE
 	static TfLiteStatus runInference(void);
 

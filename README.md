@@ -186,7 +186,7 @@ Follow the procedure below to test the model.
 12. In Settings > MCU Settings, check the option **Use float with printf from newlib-nano**. It's needed to print float values.
 
     ![Alt text](<docs/images/MCU settings.png>)
-13. Add the compiler option `CMSIS_NN`, `ARMCM7`, `CMSIS_DEVICE_ARM_CORTEX_M_XX_HEADER_FILE`, `CPU_M7`, `TF_LITE_DISABLE_X86_NEON`, `TF_LITE_MCU_DEBUG_LOG`, `TF_LITE_STATIC_MEMORY` and `USE_HAL_DRIVER`
+13. Add the compiler option `CMSIS_NN`, `ARMCM4`, `CMSIS_DEVICE_ARM_CORTEX_M_XX_HEADER_FILE`, `CPU_M4`, `TF_LITE_DISABLE_X86_NEON`, `TF_LITE_MCU_DEBUG_LOG`, `TF_LITE_STATIC_MEMORY` and `USE_HAL_DRIVER`. Check **Add to all configurations** and **Add to all languages**.
 
     ![Alt text](docs/images/CMSIS.png)
 
