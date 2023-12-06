@@ -35,6 +35,7 @@
 	#include "tensorflow/lite/micro/system_setup.h"
 	#include "tensorflow/lite/schema/schema_generated.h"
 	#include "tensorflow/lite/micro/micro_utils.h"
+	#include "tensorflow/lite/micro/cortex_m_generic/debug_log_callback.h"
 
 	#include "lstm_0_quant.h"
 	#include "lstm_0.h"
@@ -91,6 +92,7 @@ static void MX_GPIO_Init(void);
 static void MX_USART3_UART_Init(void);
 static void MX_USB_OTG_HS_USB_Init(void);
 static void MX_CRC_Init(void);
+static void debug_log_printf(const char* s);
 
 /* USER CODE BEGIN PFP */
 #ifdef RUN_INFERENCE
@@ -110,6 +112,7 @@ static void MX_CRC_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
 extern "C" {
 
 // Needed to use printf. If printf don't want be used, redefine the function "DebugLog" in file "tensorflow/lite/micro/debug_log.cc"
@@ -120,6 +123,12 @@ extern "C" {
 		return ch;
 	}
 }
+
+static void debug_log_printf(const char* s)
+{
+	printf(s);
+}
+
 
 /* USER CODE END 0 */
 
@@ -157,6 +166,11 @@ int main(void)
 
   /* USER CODE BEGIN 2 */
   printf("Test printf\r\n");
+
+#if defined(RUN_INFERENCE) || defined(PROFILE_MEMORY_AND_LATENCY)
+  // Register callback for printing debug log
+  RegisterDebugLogCallback(debug_log_printf);
+#endif
 
   // Run inference
 #ifdef RUN_INFERENCE
@@ -520,7 +534,6 @@ static void MX_GPIO_Init(void)
 		  return kTfLiteError;
 		}
 
-
 		MicroPrintf("MicroSpeech model arena size = %u\n",
 				  interpreter.arena_used_bytes());
 
@@ -562,13 +575,25 @@ static void MX_GPIO_Init(void)
 
 		nInference = C_1_test_nInputs; //vdset_off_samples / N_SAMPLE_PER_INPUT;  // For vdset_on[3][25600] / 1024, the number of inference is : 25
 
-		for(int iInference = 1; iInference < nInference ; iInference++)
+		for(int iInference = 0; iInference < nInference ; iInference++)
 		{
 		  // Copy test data into the input model
 #if defined(LSTM_1_QUANT)
-	      memcpy(model_input->data.f, C_2_test[iInference], (C_2_test_window_size - 1) * C_2_test_dimension);
+			  for(int i=0; i < (C_1_test_window_size - 1); i++)
+			  {
+				  for(int y=0; y < C_2_test_dimension; y++)
+				  {
+					  model_input->data.f[(i*C_2_test_dimension) + y] = C_2_test[iInference][i][y];
+				  }
+			  }
 #else
-		  memcpy(model_input->data.f, C_1_test[iInference], (C_1_test_window_size - 1) * C_1_test_dimension);
+			  for(int i=0; i < (C_1_test_window_size - 1); i++)
+			  {
+				  for(int y=0; y < C_1_test_dimension; y++)
+				  {
+					  model_input->data.f[(i*C_1_test_dimension) + y] = C_1_test[iInference][i][y];
+				  }
+			  }
 #endif
 
 		  uint32_t atimeStart = HAL_GetTick();
@@ -688,11 +713,23 @@ static void MX_GPIO_Init(void)
 		// Perform inference
 		//****************************************************
 
-		// Copy test data into the input model
+		  // Copy test data into the input model
 #if defined(LSTM_1_QUANT)
-		  memcpy(model_input->data.f, C_2_test[0], (C_2_test_window_size - 1) * C_2_test_dimension);
+		for(int i=0; i < (C_1_test_window_size - 1); i++)
+		{
+		  for(int y=0; y < C_2_test_dimension; y++)
+		  {
+			  model_input->data.f[(i*C_2_test_dimension) + y] = C_2_test[0][i][y];
+		  }
+		}
 #else
-		  memcpy(model_input->data.f, C_1_test[0], (C_1_test_window_size - 1) * C_1_test_dimension);
+		for(int i=0; i < (C_1_test_window_size - 1); i++)
+		{
+		  for(int y=0; y < C_1_test_dimension; y++)
+		  {
+			  model_input->data.f[(i*C_1_test_dimension) + y] = C_1_test[0][i][y];
+		  }
+		}
 #endif
 
 		uint32_t atimeStart = HAL_GetTick();

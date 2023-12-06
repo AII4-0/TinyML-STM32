@@ -5,7 +5,7 @@ This repo contains a Nucleo-F411RE and a Nucleo-H7A3ZI-Q firmware project. It en
 
 To test the project on a Nucleo-F411RE or a Nucleo-H7a3ZI-Q, you juste need to STM32CubeIDE and Git installed on Windows or Linux.
 Versions tested : 
-- Windows 11 : STM32CubeIDE v1.7.0
+- Windows 11 : STM32CubeIDE v1.13.2
 - Linux Ubuntu20.04 : STM32CubeIDE v1.13.2
 
 To test inference on a Nucleo board, follow the instructions below :
@@ -148,7 +148,7 @@ Follow the procedure below to test the model.
     ```bash
     cd tflite-micro
     python3 tensorflow/lite/micro/tools/project_generation/create_tflm_tree.py \
-    --makefile_options="OPTIMIZED_KERNEL_DIR=cmsis_nn TARGET_ARCH=project_generation" \
+    --makefile_options="TARGET=cortex_m_generic OPTIMIZED_KERNEL_DIR=cmsis_nn TARGET_ARCH=project_generation" \
     /tmp/tflm-tree
     ```
 
@@ -186,61 +186,24 @@ Follow the procedure below to test the model.
 12. In Settings > MCU Settings, check the option **Use float with printf from newlib-nano**. It's needed to print float values.
 
     ![Alt text](<docs/images/MCU settings.png>)
-13. Add the compiler option `CMSIS_NN`.
+13. Add the compiler option `CMSIS_NN`, `ARMCM7`, `CMSIS_DEVICE_ARM_CORTEX_M_XX_HEADER_FILE`, `CPU_M7`, `TF_LITE_DISABLE_X86_NEON`, `TF_LITE_MCU_DEBUG_LOG`, `TF_LITE_STATIC_MEMORY` and `USE_HAL_DRIVER`
 
     ![Alt text](docs/images/CMSIS.png)
-14. Copy the files `array.cc` and `array.h` in the folder `tensorflow_lite/tensorflow/lite/`.
-    ```bash
-    cp -r tflite-micro/tensorflow/lite/array.* P_DeployTSAD/tensorflow_lite/tensorflow/lite
-    ```
-15. Modify the file `P_test_Nucleo411RE\tensorflow_lite\tensorflow\lite\micro\micro_time.cc` like below :
+
+14. Add the compiler flag `MD` in **MCU GCC Assembler**, **MCU GCC Compiler** and **MCU G++ Compiler**
+
+    ![Alt text](docs/images/mdFlag.png)
+
+15. Modify the function `ticks_per_second()` of the file `P_DeployTSAD_h7\tensorflow_lite\tensorflow\lite\micro\cortex_m_generic\micro_time.cc`. It depends of the clock speed.
     ```c
-    #include "tensorflow/lite/micro/micro_time.h"
-    #include "stm32f4xx_hal.h"
-
-    #if defined(TF_LITE_USE_CTIME)
-    #include <ctime>
-    #endif
-
-    namespace tflite {
-
-    #if !defined(TF_LITE_USE_CTIME)
-
-    // Reference implementation of the ticks_per_second() function that's required
-    // for a platform to support Tensorflow Lite for Microcontrollers profiling.
-    // This returns 0 by default because timing is an optional feature that builds
-    // without errors on platforms that do not need it.
-    uint32_t ticks_per_second()
-    {
-        return 1000;
-    }
-
-    // Reference implementation of the GetCurrentTimeTicks() function that's
-    // required for a platform to support Tensorflow Lite for Microcontrollers
-    // profiling. This returns 0 by default because timing is an optional feature
-    // that builds without errors on platforms that do not need it.
-    uint32_t GetCurrentTimeTicks()
-    {
-        return HAL_GetTick();		// Return the number of ticks. 1 tick == 1ms
-    }
-
-    #else  // defined(TF_LITE_USE_CTIME)
-
-    // For platforms that support ctime, we implment the micro_time interface in
-    // this central location.
-    uint32_t ticks_per_second() { return CLOCKS_PER_SEC; }
-
-    uint32_t GetCurrentTimeTicks() { return clock(); }
-    #endif
-
-    }  // namespace tflite
+    uint32_t ticks_per_second() { return SystemCoreClock; }
     ```
 16. Rename main.c to main.cpp
-16. Build the project
-17. If the flash is too small, add the optimization for size :
+17. Build the project
+18. If the flash is too small, add the optimization for size :
 
     ![Alt text](docs/images/optimize.png)
 
-18. Implement your application and add model + data (gan_0_quant.cpp, gan_0_quant.h, C_1_test.h) in the project.
+19. Implement your application and add model + data (gan_0_quant.cpp, gan_0_quant.h, C_1_test.h) in the project.
 
-18. Follow the same procedure for the Nucleo-H7a3ZI-Q.
+20. Follow the same procedure for the Nucleo-H7a3ZI-Q.
