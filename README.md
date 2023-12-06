@@ -5,7 +5,7 @@ This repo contains a Nucleo-F411RE and a Nucleo-H7A3ZI-Q firmware project. It en
 
 To test the project on a Nucleo-F411RE or a Nucleo-H7a3ZI-Q, you juste need to STM32CubeIDE and Git installed on Windows or Linux.
 Versions tested : 
-- Windows 11 : STM32CubeIDE v1.13.2
+- Windows 11 : STM32CubeIDE v1.13.2, STMCubeMX v6.10.0
 - Linux Ubuntu20.04 : STM32CubeIDE v1.13.2
 
 To test inference on a Nucleo board, follow the instructions below :
@@ -207,3 +207,37 @@ Follow the procedure below to test the model.
 19. Implement your application and add model + data (gan_0_quant.cpp, gan_0_quant.h, C_1_test.h) in the project.
 
 20. Follow the same procedure for the Nucleo-H7a3ZI-Q.
+
+# 4 Create a project with STMCubeAI
+
+1. Open STMCubeMX v6.10.0 and install X-CUBE-AI. Go to Help > Manage embedded software packages.
+
+    ![Alt text](docs/images/installcubeai.png)
+
+2. Create a new project selecting the button **ACCESS TO MCU SELECTOR**.
+3. Via the filter, activate **Artificial Interlligence**. Select good options in relation with the exported model. Click on **Analyze**
+
+    ![Alt text](docs/images/importModel.png)
+
+4. Then, select the good board or MCU. Example : Nucleo-F411RE and click on start button.
+
+5. Go to **Software Packs > Select Component**
+
+    ![Alt text](docs/images/softwarepacks.png)
+
+6. Activate the core AI and select a type of application. Then, close the window.
+
+    ![Alt text](docs/images/activateAI.png)
+
+7. Go to **Software Packs** and click on the AI package. A settings window opened...
+
+    ![Alt text](docs/images/configAI.png)
+
+8. Click on Analyze.
+
+9. (Optionnal) Click on **Validate on target**
+
+10. Go to **Project Manager** and select a project name, a path and choose the STMCubeIDE toolchain.
+
+11. Finally, click **Generate Code** and open STM32CubeIDE to implement your application.
+
