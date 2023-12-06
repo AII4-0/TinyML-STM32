@@ -1199,7 +1199,7 @@
         }
     ],
     "c_activations_count": 1,
-    "date_time": "Wed Dec  6 13:10:23 2023",
+    "date_time": "Wed Dec  6 13:47:00 2023",
     "model_name": "gan_0_quant",
     "tool_version": {
         "major": 1,
@@ -1220,7 +1220,7 @@
         "buffer_crc": 0,
         "pool_size": 105616,
         "buffer_c_type": "u64",
-        "buffer_c_name": "s_network_1701436879764_weights_array_u64",
+        "buffer_c_name": "s_network_1701866511190_weights_array_u64",
         "buffer_offsets": [
             {
                 "lite_tag": null,
@@ -1314,7 +1314,7 @@
                 "buffer_name": "gemm_9_weights_array"
             }
         ],
-        "buffer_c_name_addr": "s_network_1701436879764_weights_array_u64",
+        "buffer_c_name_addr": "s_network_1701866511190_weights_array_u64",
         "buffer_c_count": 13202,
         "pool_id": 0,
         "buffer_c_data": []
@@ -1326,12 +1326,9 @@
             0,
             0
         ],
-        "series": "stm32h7",
+        "series": "generic",
         "activations": 512,
-        "toolchain_flash": 1616,
-        "toolchain_ram": 0,
-        "weights": 105616,
-        "toolchain": "arm-none-eabi-gcc (GNU Tools for STM32 11.3.rel1.20230912-1600) 11.3.1 20220712"
+        "weights": 105616
     },
     "version": "1.2",
     "tool_api_version": {
@@ -1498,6 +1495,6 @@
         "pool_id": 0
     }},
     "c_arrays_n": 34,
-    "c_name": "network_1701436879764",
+    "c_name": "network_1701866511190",
     "memory_pools": []
 }

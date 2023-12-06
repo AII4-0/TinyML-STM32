@@ -1,0 +1,267 @@
+Neural Network Tools for STM32 family v1.7.0 (stm.ai v8.1.0-19520)
+Created date          : 2023-12-06 13:47:00
+Parameters            : generate --name network_1701866511190 -m C:/Users/robin.frund/Downloads/gan_0_quant.tflite --type tflite --compression none --verbosity 1 --workspace C:\Users\ROBIN~1.FRU\AppData\Local\Temp\mxAI_workspace165347410250000013677649235440742307 --output C:\Users\robin.frund\.stm32cubemx\network_output --allocate-inputs --series stm32h7 --allocate-outputs
+
+Exec/report summary (generate)
+--------------------------------------------------------------------------------------------------------------------
+model file         :   C:\Users\robin.frund\Downloads\gan_0_quant.tflite                                            
+type               :   tflite                                                                                       
+c_name             :   network_1701866511190                                                                        
+compression        :   none                                                                                         
+options            :   allocate-inputs, allocate-outputs                                                            
+optimization       :   balanced                                                                                     
+target/series      :   stm32h7                                                                                      
+workspace dir      :   C:\Users\ROBIN~1.FRU\AppData\Local\Temp\mxAI_workspace165347410250000013677649235440742307   
+output dir         :   C:\Users\robin.frund\.stm32cubemx\network_output                                             
+model_fmt          :   ss/sa per tensor                                                                             
+model_name         :   gan_0_quant                                                                                  
+model_hash         :   9338d397e161973af17109e27ddbaf15                                                             
+params #           :   104,036 items (102.64 KiB)                                                                   
+--------------------------------------------------------------------------------------------------------------------
+input 1/1          :   'serving_default_args_00' (domain:activations/**default**)                                   
+                   :   99 items, 396 B, ai_float, float, (1,99,1)                                                   
+output 1/1         :   'conversion_13' (domain:activations/**default**)                                             
+                   :   1 items, 4 B, ai_float, float, (1,1,1)                                                       
+macc               :   104,848                                                                                      
+weights (ro)       :   105,616 B (103.14 KiB) (1 segment) / -310,528(-74.6%) vs float model                         
+activations (rw)   :   512 B (512 B) (1 segment) *                                                                  
+ram (total)        :   512 B (512 B) = 512 + 0 + 0                                                                  
+--------------------------------------------------------------------------------------------------------------------
+(*) 'input'/'output' buffers can be used from the activations buffer
+
+Model name - gan_0_quant ['serving_default_args_00'] ['conversion_13']
+------ ----------------------------------------------------------- --------------------- --------------- -------- ------------------------------------------- --- --------------- ------------------ ----------------------- 
+m_id   layer (type,original)                                       oshape                param/size          macc                                connected to   | c_size          c_macc             c_type                  
+------ ----------------------------------------------------------- --------------------- --------------- -------- ------------------------------------------- --- --------------- ------------------ ----------------------- 
+0      serving_default_args_00 (Input, )                           [b:1,h:99,h:99,c:1]                                                                          |                 +198(+100.0%)      converter_oi8[0]        
+       conversion_0 (Conversion, QUANTIZE)                         [b:1,h:99,h:99,c:1]                        198                     serving_default_args_00   |                 -198(-100.0%)      
+------ ----------------------------------------------------------- --------------------- --------------- -------- ------------------------------------------- --- --------------- ------------------ ----------------------- 
+1      reshape_1 (Reshape, RESHAPE)                                [b:1,c:99]                                                                    conversion_0   |                                    
+------ ----------------------------------------------------------- --------------------- --------------- -------- ------------------------------------------- --- --------------- ------------------ ----------------------- 
+2      model_dense_MatMul1 (Placeholder, )                         [h:128,h:128,c:99]    12,672/12,672                                                          | +512(+4.0%)     +12,800(+100.0%)   dense_oi8[1]            
+       gemm_2 (Gemm, FULLY_CONNECTED)                              [b:1,c:128]                             12,800                                   reshape_1   |                 -12,800(-100.0%)   
+                                                                                                                                          model_dense_MatMul1   | 
+------ ----------------------------------------------------------- --------------------- --------------- -------- ------------------------------------------- --- --------------- ------------------ ----------------------- 
+3      model_dense_1_MatMul (Placeholder, )                        [h:128,h:128,c:128]   16,384/16,384                                                          | +512(+3.1%)     +16,512(+100.0%)   dense_oi8[2]            
+       model_dense_1_MatMulmodel_dense_1_BiasAdd (Placeholder, )   [c:128]               128/512                                                                | -512(-100.0%)                      
+       gemm_3 (Gemm, FULLY_CONNECTED)                              [b:1,c:128]                             16,512                                      gemm_2   |                 -16,512(-100.0%)   
+                                                                                                                                         model_dense_1_MatMul   | 
+                                                                                                                    model_dense_1_MatMulmodel_dense_1_BiasAdd   | 
+------ ----------------------------------------------------------- --------------------- --------------- -------- ------------------------------------------- --- --------------- ------------------ ----------------------- 
+4      model_dense_2_MatMul (Placeholder, )                        [h:128,h:128,c:128]   16,384/16,384                                                          | +512(+3.1%)     +16,512(+100.0%)   dense_oi8[3]            
+       gemm_4 (Gemm, FULLY_CONNECTED)                              [b:1,c:128]                             16,512                                      gemm_3   |                 -16,512(-100.0%)   
+                                                                                                                                         model_dense_2_MatMul   | 
+------ ----------------------------------------------------------- --------------------- --------------- -------- ------------------------------------------- --- --------------- ------------------ ----------------------- 
+5      model_dense_3_MatMul (Placeholder, )                        [h:99,h:99,c:128]     12,672/12,672                                                          | +396(+3.1%)     +12,771(+100.0%)   dense_oi8[4]            
+       model_dense_3_MatMulmodel_dense_3_BiasAdd (Placeholder, )   [c:99]                99/396                                                                 | -396(-100.0%)                      
+       gemm_5 (Gemm, FULLY_CONNECTED)                              [b:1,c:99]                              12,771                                      gemm_4   |                 -12,771(-100.0%)   
+                                                                                                                                         model_dense_3_MatMul   | 
+                                                                                                                    model_dense_3_MatMulmodel_dense_3_BiasAdd   | 
+------ ----------------------------------------------------------- --------------------- --------------- -------- ------------------------------------------- --- --------------- ------------------ ----------------------- 
+6      nl_6 (Nonlinearity, LOGISTIC)                               [b:1,c:99]                                 990                                      gemm_5   |                 -891(-90.0%)       nl_oi8[5]               
+------ ----------------------------------------------------------- --------------------- --------------- -------- ------------------------------------------- --- --------------- ------------------ ----------------------- 
+7      model_dense_4_MatMul (Placeholder, )                        [h:128,h:128,c:99]    12,672/12,672                                                          | +512(+4.0%)     +12,800(+100.0%)   dense_oi8[6]            
+       gemm_7 (Gemm, FULLY_CONNECTED)                              [b:1,c:128]                             12,800                                        nl_6   |                 -12,800(-100.0%)   
+                                                                                                                                         model_dense_4_MatMul   | 
+------ ----------------------------------------------------------- --------------------- --------------- -------- ------------------------------------------- --- --------------- ------------------ ----------------------- 
+8      model_dense_5_MatMul (Placeholder, )                        [h:128,h:128,c:128]   16,384/16,384                                                          | +512(+3.1%)     +16,512(+100.0%)   dense_oi8[7]            
+       model_dense_5_MatMulmodel_dense_5_BiasAdd (Placeholder, )   [c:128]               128/512                                                                | -512(-100.0%)                      
+       gemm_8 (Gemm, FULLY_CONNECTED)                              [b:1,c:128]                             16,512                                      gemm_7   |                 -16,512(-100.0%)   
+                                                                                                                                         model_dense_5_MatMul   | 
+                                                                                                                    model_dense_5_MatMulmodel_dense_5_BiasAdd   | 
+------ ----------------------------------------------------------- --------------------- --------------- -------- ------------------------------------------- --- --------------- ------------------ ----------------------- 
+9      model_dense_6_MatMul (Placeholder, )                        [h:128,h:128,c:128]   16,384/16,384                                                          | +512(+3.1%)     +16,512(+100.0%)   dense_oi8[8]            
+       gemm_9 (Gemm, FULLY_CONNECTED)                              [b:1,c:128]                             16,512                                      gemm_8   |                 -16,512(-100.0%)   
+                                                                                                                                         model_dense_6_MatMul   | 
+------ ----------------------------------------------------------- --------------------- --------------- -------- ------------------------------------------- --- --------------- ------------------ ----------------------- 
+10     model_dense_7_MatMul (Placeholder, )                        [b:1,c:128]           128/128                                                                | +4(+3.1%)       +129(+100.0%)      dense_oi8[9]            
+       model_dense_7_MatMulmodel_dense_7_BiasAdd (Placeholder, )   [c:1]                 1/4                                                                    | -4(-100.0%)                        
+       gemm_10 (Gemm, FULLY_CONNECTED)                             [b:1,c:1]                                  129                                      gemm_9   |                 -129(-100.0%)      
+                                                                                                                                         model_dense_7_MatMul   | 
+                                                                                                                    model_dense_7_MatMulmodel_dense_7_BiasAdd   | 
+------ ----------------------------------------------------------- --------------------- --------------- -------- ------------------------------------------- --- --------------- ------------------ ----------------------- 
+11     nl_11 (Nonlinearity, LOGISTIC)                              [b:1,c:1]                                   10                                     gemm_10   |                 -9(-90.0%)         nl_oi8[10]              
+------ ----------------------------------------------------------- --------------------- --------------- -------- ------------------------------------------- --- --------------- ------------------ ----------------------- 
+12     reshape_12 (Reshape, RESHAPE)                               [b:1,h:1,h:1,c:1]                                                                    nl_11   |                                    
+------ ----------------------------------------------------------- --------------------- --------------- -------- ------------------------------------------- --- --------------- ------------------ ----------------------- 
+13     conversion_13 (Conversion, DEQUANTIZE)                      [b:1,h:1,h:1,c:1]                            2                                  reshape_12   |                                    converter_of32[o][11]   
+------ ----------------------------------------------------------- --------------------- --------------- -------- ------------------------------------------- --- --------------- ------------------ ----------------------- 
+model/c-model: macc=105,748/104,848 -900(-0.9%) weights=105,104/105,616 +512(+0.5%) activations=--/512 io=--/0
+
+
+
+Generated C-graph summary
+------------------------------------------------------------------------------------------------------------------------
+model name            : gan_0_quant
+c-name                : network_1701866511190
+c-node #              : 12
+c-array #             : 34
+activations size      : 512 (1 segment)
+weights size          : 105616 (1 segment)
+macc                  : 104848
+inputs                : ['serving_default_args_00_output']
+outputs               : ['conversion_13_output']
+
+C-Arrays (34)
+------ -------------------------------- ------------- ------------------------- --------------- --------- --------- 
+c_id   name (*_array)                   item/size     domain/mem-pool           c-type          fmt       comment   
+------ -------------------------------- ------------- ------------------------- --------------- --------- --------- 
+0      gemm_10_weights                  128/128       weights/weights           const int8_t    ss8                 
+1      gemm_10_bias                     1/4           weights/weights           const int32_t   ss32                
+2      gemm_2_scratch0                  99/198        activations/**default**   int16_t         s16                 
+3      gemm_3_scratch0                  128/256       activations/**default**   int16_t         s16                 
+4      gemm_4_scratch0                  128/256       activations/**default**   int16_t         s16                 
+5      gemm_5_scratch0                  128/256       activations/**default**   int16_t         s16                 
+6      gemm_7_scratch0                  99/198        activations/**default**   int16_t         s16                 
+7      gemm_8_scratch0                  128/256       activations/**default**   int16_t         s16                 
+8      gemm_9_scratch0                  128/256       activations/**default**   int16_t         s16                 
+9      gemm_10_scratch0                 128/256       activations/**default**   int16_t         s16                 
+10     serving_default_args_00_output   99/396        activations/**default**   float           float32   /input    
+11     conversion_0_output              99/99         activations/**default**   int8_t          sa8                 
+12     gemm_2_output                    128/128       activations/**default**   int8_t          sa8                 
+13     gemm_3_output                    128/128       activations/**default**   int8_t          sa8                 
+14     gemm_4_output                    128/128       activations/**default**   int8_t          sa8                 
+15     gemm_5_output                    99/99         activations/**default**   int8_t          sa8                 
+16     nl_6_output                      99/99         activations/**default**   int8_t          sa8                 
+17     gemm_7_output                    128/128       activations/**default**   int8_t          sa8                 
+18     gemm_8_output                    128/128       activations/**default**   int8_t          sa8                 
+19     gemm_9_output                    128/128       activations/**default**   int8_t          sa8                 
+20     gemm_10_output                   1/1           activations/**default**   int8_t          sa8                 
+21     nl_11_output                     1/1           activations/**default**   int8_t          sa8                 
+22     conversion_13_output             1/4           activations/**default**   float           float32   /output   
+23     gemm_2_weights                   12672/12672   weights/weights           const int8_t    ss8                 
+24     gemm_2_bias                      128/512       weights/weights           const int32_t   ss32                
+25     gemm_3_weights                   16384/16384   weights/weights           const int8_t    ss8                 
+26     gemm_3_bias                      128/512       weights/weights           const int32_t   ss32                
+27     gemm_4_weights                   16384/16384   weights/weights           const int8_t    ss8                 
+28     gemm_5_weights                   12672/12672   weights/weights           const int8_t    ss8                 
+29     gemm_5_bias                      99/396        weights/weights           const int32_t   ss32                
+30     gemm_7_weights                   12672/12672   weights/weights           const int8_t    ss8                 
+31     gemm_8_weights                   16384/16384   weights/weights           const int8_t    ss8                 
+32     gemm_8_bias                      128/512       weights/weights           const int32_t   ss32                
+33     gemm_9_weights                   16384/16384   weights/weights           const int8_t    ss8                 
+------ -------------------------------- ------------- ------------------------- --------------- --------- --------- 
+
+C-Layers (12)
+------ ---------------- ---- ------------ ------- ------- ----------------------------------- ------------------ 
+c_id   name (*_layer)   id   layer_type   macc    rom     tensors                             shape (array id)   
+------ ---------------- ---- ------------ ------- ------- ----------------------------------- ------------------ 
+0      conversion_0     0    converter    198     0       I: serving_default_args_00_output   (1,99,1) (10)      
+                                                          O: conversion_0_output              (1,99,1) (11)      
+------ ---------------- ---- ------------ ------- ------- ----------------------------------- ------------------ 
+1      gemm_2           2    dense        12800   13184   I: conversion_0_output0             (1,99) (11)        
+                                                          S: gemm_2_scratch0                                     
+                                                          W: gemm_2_weights                   (99,128) (23)      
+                                                          W: gemm_2_bias                      (128,) (24)        
+                                                          O: gemm_2_output                    (1,128) (12)       
+------ ---------------- ---- ------------ ------- ------- ----------------------------------- ------------------ 
+2      gemm_3           3    dense        16512   16896   I: gemm_2_output                    (1,128) (12)       
+                                                          S: gemm_3_scratch0                                     
+                                                          W: gemm_3_weights                   (128,128) (25)     
+                                                          W: gemm_3_bias                      (128,) (26)        
+                                                          O: gemm_3_output                    (1,128) (13)       
+------ ---------------- ---- ------------ ------- ------- ----------------------------------- ------------------ 
+3      gemm_4           4    dense        16512   16896   I: gemm_3_output                    (1,128) (13)       
+                                                          S: gemm_4_scratch0                                     
+                                                          W: gemm_4_weights                   (128,128) (27)     
+                                                          W: gemm_2_bias                      (128,) (24)        
+                                                          O: gemm_4_output                    (1,128) (14)       
+------ ---------------- ---- ------------ ------- ------- ----------------------------------- ------------------ 
+4      gemm_5           5    dense        12771   13068   I: gemm_4_output                    (1,128) (14)       
+                                                          S: gemm_5_scratch0                                     
+                                                          W: gemm_5_weights                   (128,99) (28)      
+                                                          W: gemm_5_bias                      (99,) (29)         
+                                                          O: gemm_5_output                    (1,99) (15)        
+------ ---------------- ---- ------------ ------- ------- ----------------------------------- ------------------ 
+5      nl_6             6    nl           99      0       I: gemm_5_output                    (1,99) (15)        
+                                                          O: nl_6_output                      (1,99) (16)        
+------ ---------------- ---- ------------ ------- ------- ----------------------------------- ------------------ 
+6      gemm_7           7    dense        12800   13184   I: nl_6_output                      (1,99) (16)        
+                                                          S: gemm_7_scratch0                                     
+                                                          W: gemm_7_weights                   (99,128) (30)      
+                                                          W: gemm_2_bias                      (128,) (24)        
+                                                          O: gemm_7_output                    (1,128) (17)       
+------ ---------------- ---- ------------ ------- ------- ----------------------------------- ------------------ 
+7      gemm_8           8    dense        16512   16896   I: gemm_7_output                    (1,128) (17)       
+                                                          S: gemm_8_scratch0                                     
+                                                          W: gemm_8_weights                   (128,128) (31)     
+                                                          W: gemm_8_bias                      (128,) (32)        
+                                                          O: gemm_8_output                    (1,128) (18)       
+------ ---------------- ---- ------------ ------- ------- ----------------------------------- ------------------ 
+8      gemm_9           9    dense        16512   16896   I: gemm_8_output                    (1,128) (18)       
+                                                          S: gemm_9_scratch0                                     
+                                                          W: gemm_9_weights                   (128,128) (33)     
+                                                          W: gemm_2_bias                      (128,) (24)        
+                                                          O: gemm_9_output                    (1,128) (19)       
+------ ---------------- ---- ------------ ------- ------- ----------------------------------- ------------------ 
+9      gemm_10          10   dense        129     132     I: gemm_9_output                    (1,128) (19)       
+                                                          S: gemm_10_scratch0                                    
+                                                          W: gemm_10_weights                  (128,1) (0)        
+                                                          W: gemm_10_bias                     (1,) (1)           
+                                                          O: gemm_10_output                   (1,1) (20)         
+------ ---------------- ---- ------------ ------- ------- ----------------------------------- ------------------ 
+10     nl_11            11   nl           1       0       I: gemm_10_output                   (1,1) (20)         
+                                                          O: nl_11_output                     (1,1) (21)         
+------ ---------------- ---- ------------ ------- ------- ----------------------------------- ------------------ 
+11     conversion_13    13   converter    2       0       I: nl_11_output                     (1,1) (21)         
+                                                          O: conversion_13_output             (1,1,1) (22)       
+------ ---------------- ---- ------------ ------- ------- ----------------------------------- ------------------ 
+
+
+
+Number of operations per c-layer
+------- ------ --------------------------- --------- ------------- --------- ---------- 
+c_id    m_id   name (type)                       #op          type    #param   sparsity 
+------- ------ --------------------------- --------- ------------- --------- ---------- 
+0       0      conversion_0 (converter)          198   conv_f32_s8           
+1       2      gemm_2 (dense)                 12,800    smul_s8_s8    12,800     0.0163 
+2       3      gemm_3 (dense)                 16,512    smul_s8_s8    16,512     0.0048 
+3       4      gemm_4 (dense)                 16,512    smul_s8_s8    16,512     0.0115 
+4       5      gemm_5 (dense)                 12,771    smul_s8_s8    12,771     0.0066 
+5       6      nl_6 (nl)                          99      op_s8_s8           
+6       7      gemm_7 (dense)                 12,800    smul_s8_s8    12,800     0.0145 
+7       8      gemm_8 (dense)                 16,512    smul_s8_s8    16,512     0.0044 
+8       9      gemm_9 (dense)                 16,512    smul_s8_s8    16,512     0.0132 
+9       10     gemm_10 (dense)                   129    smul_s8_s8       129     0.0000 
+10      11     nl_11 (nl)                          1      op_s8_s8           
+11      13     conversion_13 (converter)           2   conv_s8_f32           
+------- ------ --------------------------- --------- ------------- --------- ---------- 
+total                                        104,848                 104,548     0.0099 
+
+Number of operation types
+---------------- --------- ----------- 
+operation type           #           % 
+---------------- --------- ----------- 
+conv_f32_s8            198        0.2% 
+smul_s8_s8         104,548       99.7% 
+op_s8_s8               100        0.1% 
+conv_s8_f32              2        0.0% 
+
+Complexity report (model)
+------ ------------------------- ------------------------- ------------------------- ------ 
+m_id   name                      c_macc                    c_rom                     c_id   
+------ ------------------------- ------------------------- ------------------------- ------ 
+0      serving_default_args_00   |                  0.2%   |                  0.0%   [0]    
+2      model_dense_MatMul1       ||||||||||||      12.2%   ||||||||||||      12.5%   [1]    
+3      model_dense_1_MatMul      ||||||||||||||||  15.7%   ||||||||||||||||  16.0%   [2]    
+4      model_dense_2_MatMul      ||||||||||||||||  15.7%   ||||||||||||||||  16.0%   [3]    
+5      model_dense_3_MatMul      ||||||||||||      12.2%   ||||||||||||      12.4%   [4]    
+6      nl_6                      |                  0.1%   |                  0.0%   [5]    
+7      model_dense_4_MatMul      ||||||||||||      12.2%   ||||||||||||      12.5%   [6]    
+8      model_dense_5_MatMul      ||||||||||||||||  15.7%   ||||||||||||||||  16.0%   [7]    
+9      model_dense_6_MatMul      ||||||||||||||||  15.7%   ||||||||||||||||  16.0%   [8]    
+10     model_dense_7_MatMul      |                  0.1%   |                  0.1%   [9]    
+11     nl_11                     |                  0.0%   |                  0.0%   [10]   
+13     conversion_13             |                  0.0%   |                  0.0%   [11]   
+------ ------------------------- ------------------------- ------------------------- ------ 
+macc=104,848 weights=105,616 act=512 ram_io=0
+
+Generated files (7)
+-------------------------------------------------------------------------------------- 
+C:\Users\robin.frund\.stm32cubemx\network_output\network_1701866511190_config.h        
+C:\Users\robin.frund\.stm32cubemx\network_output\network_1701866511190.h               
+C:\Users\robin.frund\.stm32cubemx\network_output\network_1701866511190.c               
+C:\Users\robin.frund\.stm32cubemx\network_output\network_1701866511190_data_params.h   
+C:\Users\robin.frund\.stm32cubemx\network_output\network_1701866511190_data_params.c   
+C:\Users\robin.frund\.stm32cubemx\network_output\network_1701866511190_data.h          
+C:\Users\robin.frund\.stm32cubemx\network_output\network_1701866511190_data.c          
