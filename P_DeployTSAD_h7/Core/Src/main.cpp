@@ -43,9 +43,10 @@
 	#include "lstm_1.h"
 	#include "gan_0_quant.h"
 	#include "gan_0.h"
-	#include "C_1_test.h"
-//	#include "C_1_test_400.h"
-	#include "C_2_test.h"
+//	#include "C_1_test.h"
+	#include "C_1_test_400.h"
+//	#include "C_2_test.h"
+	#include "C_2_test_400.h"
 
 #elif defined( BASELINE_MEMORY_FOOTPRINT )
 	#include <stdio.h>
@@ -62,7 +63,7 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 #if defined( PROFILE_MEMORY_AND_LATENCY ) || defined( RUN_INFERENCE )
-	#define TENSOR_ARENA_SIZE (215 * 1024)
+	#define TENSOR_ARENA_SIZE (4 * 1024)
 	#define N_SAMPLE_PER_INPUT 100
 #endif
 
@@ -146,7 +147,7 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+   HAL_Init();
 
   /* USER CODE BEGIN Init */
 
@@ -580,7 +581,7 @@ static void MX_GPIO_Init(void)
 		{
 		  // Copy test data into the input model
 #if defined(LSTM_1_QUANT)
-			  for(int i=0; i < (C_1_test_window_size - 1); i++)
+			  for(int i=0; i < (C_2_test_window_size - 1); i++)
 			  {
 				  for(int y=0; y < C_2_test_dimension; y++)
 				  {
@@ -716,7 +717,7 @@ static void MX_GPIO_Init(void)
 
 		  // Copy test data into the input model
 #if defined(LSTM_1_QUANT)
-		for(int i=0; i < (C_1_test_window_size - 1); i++)
+		for(int i=0; i < (C_2_test_window_size - 1); i++)
 		{
 		  for(int y=0; y < C_2_test_dimension; y++)
 		  {

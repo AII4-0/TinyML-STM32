@@ -43,9 +43,9 @@
                 ]
             },
             "weight_sparsity": [
-                0.016328125000000027,
+                0.016093750000000018,
                 12800,
-                209
+                206
             ],
             "layer_type": "dense",
             "m_id": 2
@@ -69,9 +69,9 @@
                 ]
             },
             "weight_sparsity": [
-                0.004784399224806224,
+                0.005147771317829508,
                 16512,
-                79
+                85
             ],
             "layer_type": "dense",
             "m_id": 3
@@ -95,9 +95,9 @@
                 ]
             },
             "weight_sparsity": [
-                0.011506782945736482,
+                0.013444767441860517,
                 16512,
-                190
+                222
             ],
             "layer_type": "dense",
             "m_id": 4
@@ -121,9 +121,9 @@
                 ]
             },
             "weight_sparsity": [
-                0.006577401926239124,
+                0.004306632213608941,
                 12771,
-                84
+                55
             ],
             "layer_type": "dense",
             "m_id": 5
@@ -170,9 +170,9 @@
                 ]
             },
             "weight_sparsity": [
-                0.014453124999999956,
+                0.013984375000000049,
                 12800,
-                185
+                179
             ],
             "layer_type": "dense",
             "m_id": 7
@@ -196,9 +196,9 @@
                 ]
             },
             "weight_sparsity": [
-                0.0043604651162790775,
+                0.004239341085271353,
                 16512,
-                72
+                70
             ],
             "layer_type": "dense",
             "m_id": 8
@@ -222,9 +222,9 @@
                 ]
             },
             "weight_sparsity": [
-                0.013202519379844957,
+                0.012354651162790664,
                 16512,
-                218
+                204
             ],
             "layer_type": "dense",
             "m_id": 9
@@ -325,7 +325,7 @@
             "is_const": true,
             "format": "ss8",
             "n_items": 128,
-            "scale": [7.138022338040173E-4],
+            "scale": [7.440701010636985E-4],
             "tensors": [{
                 "intq": "gemm_10_weights_array_intq",
                 "shape": [
@@ -336,7 +336,7 @@
             }],
             "zeropoint": [0],
             "zeros": 0,
-            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.0007138022338040173] Zeros: [0] Quantizer: UNIFORM)",
+            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.0007440701010636985] Zeros: [0] Quantizer: UNIFORM)",
             "c_mem_pool": "weights",
             "padded": true,
             "size": 128,
@@ -352,14 +352,14 @@
             "is_const": true,
             "format": "ss32",
             "n_items": 1,
-            "scale": [6.003163434797898E-6],
+            "scale": [9.34264789975714E-6],
             "tensors": [{
                 "shape": [1],
                 "name": "gemm_10_bias"
             }],
             "zeropoint": [0],
             "zeros": 0,
-            "raw_fmt": "(SIGNED, 32 bit, C Size: 32 bits Scales: [6.003163434797898e-06] Zeros: [0] Quantizer: UNIFORM)",
+            "raw_fmt": "(SIGNED, 32 bit, C Size: 32 bits Scales: [9.34264789975714e-06] Zeros: [0] Quantizer: UNIFORM)",
             "c_mem_pool": "weights",
             "padded": true,
             "size": 1,
@@ -637,7 +637,7 @@
             "is_const": false,
             "format": "sa8",
             "n_items": 128,
-            "scale": [0.007504951674491167],
+            "scale": [0.006928495597094297],
             "tensors": [{
                 "intq": "gemm_2_output_array_intq",
                 "shape": [
@@ -646,8 +646,8 @@
                 ],
                 "name": "gemm_2_output"
             }],
-            "zeropoint": [-4],
-            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.007504951674491167] Zeros: [-4] Quantizer: UNIFORM)",
+            "zeropoint": [13],
+            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.006928495597094297] Zeros: [13] Quantizer: UNIFORM)",
             "c_mem_pool": "**default**",
             "padded": true,
             "size": 128,
@@ -663,7 +663,7 @@
             "is_const": false,
             "format": "sa8",
             "n_items": 128,
-            "scale": [0.012613669969141483],
+            "scale": [0.012474603950977325],
             "tensors": [{
                 "intq": "gemm_3_output_array_intq",
                 "shape": [
@@ -672,8 +672,8 @@
                 ],
                 "name": "gemm_3_output"
             }],
-            "zeropoint": [-6],
-            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.012613669969141483] Zeros: [-6] Quantizer: UNIFORM)",
+            "zeropoint": [4],
+            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.012474603950977325] Zeros: [4] Quantizer: UNIFORM)",
             "c_mem_pool": "**default**",
             "padded": true,
             "size": 128,
@@ -689,7 +689,7 @@
             "is_const": false,
             "format": "sa8",
             "n_items": 128,
-            "scale": [0.021980056539177895],
+            "scale": [0.022541562095284462],
             "tensors": [{
                 "intq": "gemm_4_output_array_intq",
                 "shape": [
@@ -698,8 +698,8 @@
                 ],
                 "name": "gemm_4_output"
             }],
-            "zeropoint": [7],
-            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.021980056539177895] Zeros: [7] Quantizer: UNIFORM)",
+            "zeropoint": [-6],
+            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.022541562095284462] Zeros: [-6] Quantizer: UNIFORM)",
             "c_mem_pool": "**default**",
             "padded": true,
             "size": 128,
@@ -715,7 +715,7 @@
             "is_const": false,
             "format": "sa8",
             "n_items": 99,
-            "scale": [0.02101803570985794],
+            "scale": [0.03018173947930336],
             "tensors": [{
                 "intq": "gemm_5_output_array_intq",
                 "shape": [
@@ -724,8 +724,8 @@
                 ],
                 "name": "gemm_5_output"
             }],
-            "zeropoint": [71],
-            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.02101803570985794] Zeros: [71] Quantizer: UNIFORM)",
+            "zeropoint": [20],
+            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.03018173947930336] Zeros: [20] Quantizer: UNIFORM)",
             "c_mem_pool": "**default**",
             "padded": true,
             "size": 99,
@@ -767,7 +767,7 @@
             "is_const": false,
             "format": "sa8",
             "n_items": 128,
-            "scale": [0.008184771053493023],
+            "scale": [0.010419470258057117],
             "tensors": [{
                 "intq": "gemm_7_output_array_intq",
                 "shape": [
@@ -776,8 +776,8 @@
                 ],
                 "name": "gemm_7_output"
             }],
-            "zeropoint": [12],
-            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.008184771053493023] Zeros: [12] Quantizer: UNIFORM)",
+            "zeropoint": [-16],
+            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.010419470258057117] Zeros: [-16] Quantizer: UNIFORM)",
             "c_mem_pool": "**default**",
             "padded": true,
             "size": 128,
@@ -793,7 +793,7 @@
             "is_const": false,
             "format": "sa8",
             "n_items": 128,
-            "scale": [0.008998564444482327],
+            "scale": [0.012715449556708336],
             "tensors": [{
                 "intq": "gemm_8_output_array_intq",
                 "shape": [
@@ -802,8 +802,8 @@
                 ],
                 "name": "gemm_8_output"
             }],
-            "zeropoint": [2],
-            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.008998564444482327] Zeros: [2] Quantizer: UNIFORM)",
+            "zeropoint": [16],
+            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.012715449556708336] Zeros: [16] Quantizer: UNIFORM)",
             "c_mem_pool": "**default**",
             "padded": true,
             "size": 128,
@@ -819,7 +819,7 @@
             "is_const": false,
             "format": "sa8",
             "n_items": 128,
-            "scale": [0.008410121314227581],
+            "scale": [0.012556139379739761],
             "tensors": [{
                 "intq": "gemm_9_output_array_intq",
                 "shape": [
@@ -828,8 +828,8 @@
                 ],
                 "name": "gemm_9_output"
             }],
-            "zeropoint": [14],
-            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.008410121314227581] Zeros: [14] Quantizer: UNIFORM)",
+            "zeropoint": [-4],
+            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.012556139379739761] Zeros: [-4] Quantizer: UNIFORM)",
             "c_mem_pool": "**default**",
             "padded": true,
             "size": 128,
@@ -845,7 +845,7 @@
             "is_const": false,
             "format": "sa8",
             "n_items": 1,
-            "scale": [0.010713807307183743],
+            "scale": [0.013394059613347054],
             "tensors": [{
                 "intq": "gemm_10_output_array_intq",
                 "shape": [
@@ -855,7 +855,7 @@
                 "name": "gemm_10_output"
             }],
             "zeropoint": [127],
-            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.010713807307183743] Zeros: [127] Quantizer: UNIFORM)",
+            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.013394059613347054] Zeros: [127] Quantizer: UNIFORM)",
             "c_mem_pool": "**default**",
             "padded": true,
             "size": 1,
@@ -922,7 +922,7 @@
             "is_const": true,
             "format": "ss8",
             "n_items": 12672,
-            "scale": [0.0010614943457767367],
+            "scale": [0.0010661628330126405],
             "tensors": [{
                 "intq": "gemm_2_weights_array_intq",
                 "shape": [
@@ -932,8 +932,8 @@
                 "name": "gemm_2_weights"
             }],
             "zeropoint": [0],
-            "zeros": 81,
-            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.0010614943457767367] Zeros: [0] Quantizer: UNIFORM)",
+            "zeros": 78,
+            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.0010661628330126405] Zeros: [0] Quantizer: UNIFORM)",
             "c_mem_pool": "weights",
             "padded": true,
             "size": 12672,
@@ -972,7 +972,7 @@
             "is_const": true,
             "format": "ss8",
             "n_items": 16384,
-            "scale": [9.391256608068943E-4],
+            "scale": [9.535033022984862E-4],
             "tensors": [{
                 "intq": "gemm_3_weights_array_intq",
                 "shape": [
@@ -982,8 +982,8 @@
                 "name": "gemm_3_weights"
             }],
             "zeropoint": [0],
-            "zeros": 79,
-            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.0009391256608068943] Zeros: [0] Quantizer: UNIFORM)",
+            "zeros": 85,
+            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.0009535033022984862] Zeros: [0] Quantizer: UNIFORM)",
             "c_mem_pool": "weights",
             "padded": true,
             "size": 16384,
@@ -999,14 +999,14 @@
             "is_const": true,
             "format": "ss32",
             "n_items": 128,
-            "scale": [7.0480928116012365E-6],
+            "scale": [6.60634350424516E-6],
             "tensors": [{
                 "shape": [128],
                 "name": "gemm_3_bias"
             }],
             "zeropoint": [0],
             "zeros": 0,
-            "raw_fmt": "(SIGNED, 32 bit, C Size: 32 bits Scales: [7.0480928116012365e-06] Zeros: [0] Quantizer: UNIFORM)",
+            "raw_fmt": "(SIGNED, 32 bit, C Size: 32 bits Scales: [6.60634350424516e-06] Zeros: [0] Quantizer: UNIFORM)",
             "c_mem_pool": "weights",
             "padded": true,
             "size": 128,
@@ -1022,7 +1022,7 @@
             "is_const": true,
             "format": "ss8",
             "n_items": 16384,
-            "scale": [9.088726947084069E-4],
+            "scale": [9.320133249275386E-4],
             "tensors": [{
                 "intq": "gemm_4_weights_array_intq",
                 "shape": [
@@ -1032,8 +1032,8 @@
                 "name": "gemm_4_weights"
             }],
             "zeropoint": [0],
-            "zeros": 62,
-            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.0009088726947084069] Zeros: [0] Quantizer: UNIFORM)",
+            "zeros": 94,
+            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.0009320133249275386] Zeros: [0] Quantizer: UNIFORM)",
             "c_mem_pool": "weights",
             "padded": true,
             "size": 16384,
@@ -1049,7 +1049,7 @@
             "is_const": true,
             "format": "ss8",
             "n_items": 12672,
-            "scale": [9.7756611648947E-4],
+            "scale": [9.288392029702663E-4],
             "tensors": [{
                 "intq": "gemm_5_weights_array_intq",
                 "shape": [
@@ -1059,8 +1059,8 @@
                 "name": "gemm_5_weights"
             }],
             "zeropoint": [0],
-            "zeros": 84,
-            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.00097756611648947] Zeros: [0] Quantizer: UNIFORM)",
+            "zeros": 55,
+            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.0009288392029702663] Zeros: [0] Quantizer: UNIFORM)",
             "c_mem_pool": "weights",
             "padded": true,
             "size": 12672,
@@ -1076,14 +1076,14 @@
             "is_const": true,
             "format": "ss32",
             "n_items": 99,
-            "scale": [2.1486957848537713E-5],
+            "scale": [2.09374866244616E-5],
             "tensors": [{
                 "shape": [99],
                 "name": "gemm_5_bias"
             }],
             "zeropoint": [0],
             "zeros": 0,
-            "raw_fmt": "(SIGNED, 32 bit, C Size: 32 bits Scales: [2.1486957848537713e-05] Zeros: [0] Quantizer: UNIFORM)",
+            "raw_fmt": "(SIGNED, 32 bit, C Size: 32 bits Scales: [2.09374866244616e-05] Zeros: [0] Quantizer: UNIFORM)",
             "c_mem_pool": "weights",
             "padded": true,
             "size": 99,
@@ -1099,7 +1099,7 @@
             "is_const": true,
             "format": "ss8",
             "n_items": 12672,
-            "scale": [8.712088456377387E-4],
+            "scale": [8.847567951306701E-4],
             "tensors": [{
                 "intq": "gemm_7_weights_array_intq",
                 "shape": [
@@ -1109,8 +1109,8 @@
                 "name": "gemm_7_weights"
             }],
             "zeropoint": [0],
-            "zeros": 57,
-            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.0008712088456377387] Zeros: [0] Quantizer: UNIFORM)",
+            "zeros": 51,
+            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.0008847567951306701] Zeros: [0] Quantizer: UNIFORM)",
             "c_mem_pool": "weights",
             "padded": true,
             "size": 12672,
@@ -1126,7 +1126,7 @@
             "is_const": true,
             "format": "ss8",
             "n_items": 16384,
-            "scale": [8.272083941847086E-4],
+            "scale": [8.152360678650439E-4],
             "tensors": [{
                 "intq": "gemm_8_weights_array_intq",
                 "shape": [
@@ -1136,8 +1136,8 @@
                 "name": "gemm_8_weights"
             }],
             "zeropoint": [0],
-            "zeros": 72,
-            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.0008272083941847086] Zeros: [0] Quantizer: UNIFORM)",
+            "zeros": 70,
+            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.0008152360678650439] Zeros: [0] Quantizer: UNIFORM)",
             "c_mem_pool": "weights",
             "padded": true,
             "size": 16384,
@@ -1153,14 +1153,14 @@
             "is_const": true,
             "format": "ss32",
             "n_items": 128,
-            "scale": [6.770511390641332E-6],
+            "scale": [8.494327630614862E-6],
             "tensors": [{
                 "shape": [128],
                 "name": "gemm_8_bias"
             }],
             "zeropoint": [0],
             "zeros": 0,
-            "raw_fmt": "(SIGNED, 32 bit, C Size: 32 bits Scales: [6.770511390641332e-06] Zeros: [0] Quantizer: UNIFORM)",
+            "raw_fmt": "(SIGNED, 32 bit, C Size: 32 bits Scales: [8.494327630614862e-06] Zeros: [0] Quantizer: UNIFORM)",
             "c_mem_pool": "weights",
             "padded": true,
             "size": 128,
@@ -1176,7 +1176,7 @@
             "is_const": true,
             "format": "ss8",
             "n_items": 16384,
-            "scale": [7.827207446098328E-4],
+            "scale": [8.064860594458878E-4],
             "tensors": [{
                 "intq": "gemm_9_weights_array_intq",
                 "shape": [
@@ -1186,8 +1186,8 @@
                 "name": "gemm_9_weights"
             }],
             "zeropoint": [0],
-            "zeros": 90,
-            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.0007827207446098328] Zeros: [0] Quantizer: UNIFORM)",
+            "zeros": 76,
+            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.0008064860594458878] Zeros: [0] Quantizer: UNIFORM)",
             "c_mem_pool": "weights",
             "padded": true,
             "size": 16384,
@@ -1199,7 +1199,7 @@
         }
     ],
     "c_activations_count": 1,
-    "date_time": "Wed Dec  6 13:47:00 2023",
+    "date_time": "Wed Dec 13 10:49:25 2023",
     "model_name": "gan_0_quant",
     "tool_version": {
         "major": 1,
@@ -1336,7 +1336,7 @@
         "minor": 5,
         "micro": 0
     },
-    "model_signature": "9338d397e161973af17109e27ddbaf15",
+    "model_signature": "35a9067d169574c1992f6ed632ce21e6",
     "params_alignment": 4,
     "activations": {"heap_overlay_pool": {
         "buffer_data_size": 0,

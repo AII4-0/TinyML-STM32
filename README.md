@@ -22,7 +22,7 @@ To test inference on a Nucleo board, follow the instructions below :
     4. Finish
 5. Build the project with the hammer.
 6. Connect the Nucleo via an USB cable to your PC.
-7. Open a terminal or putty to open a virtual serial port where the Nucleo is connected. Set the baudrate to 9600.
+7. Open a terminal or putty to open a virtual serial port where the Nucleo is connected. Set the baudrate to 9600. For the project **P_DeployTSAD
     
     ![Alt text](docs/images/portcom.png)
 
@@ -141,7 +141,7 @@ Follow the procedure below to test the model.
 
 
 
-## 2 Generate the TFLiteMicro library for the embedded system
+## 3 Generate the TFLiteMicro library for the embedded system
 
 1. Generate the source tree
 
@@ -153,7 +153,7 @@ Follow the procedure below to test the model.
     ```
 
 
-## 3 Create a new project to deploy the model
+## 4 Create a new project to deploy the model
 
 1. Open STM32CubeIDE and open as workspace the repo cloned.
 3. Create a new project : **File > New > New STM32 project** and choose the right board
@@ -208,7 +208,7 @@ Follow the procedure below to test the model.
 
 20. Follow the same procedure for the Nucleo-H7a3ZI-Q.
 
-# 4 Create a project with STMCubeAI
+## 5 Create a project with STMCubeAI
 
 1. Open STMCubeMX v6.10.0 and install X-CUBE-AI. Go to Help > Manage embedded software packages.
 
@@ -240,4 +240,110 @@ Follow the procedure below to test the model.
 10. Go to **Project Manager** and select a project name, a path and choose the STMCubeIDE toolchain.
 
 11. Finally, click **Generate Code** and open STM32CubeIDE to implement your application.
+
+# 6 Evaluation of performance
+
+## P_DeployTSAD
+
+This project run on a Nucleo-F411RE and embedds a cortex-M4. There is a 512kB Flash and a 128kB RAM.
+
+To measure the STM-HAL memory footprint, it's necessary to replace the define `#define RUN_INFERENCE` by `#define BASELINE_MEMORY_FOOTPRINT` in the main file.
+Then, the memory footprint of TFlite ca be measured with `#define RUN_INFERENCE` or `PROFILE_MEMORY_AND_LATENCY`.
+
+These measures are did with the `gan_0_quant` model.
+
+Baseline memory footprint: 19.33 kB of flash, 2.38 kB of RAM
+(.text section) in FLASH : 17.56kB
+
+![Alt text](docs/images/image-1.png)
+![Alt text](docs/images/image.png)
+
+Size of the temporary memory used by the model in RAM: less than 4096 bytes => 4kB
+Size of the model in Flash (.rodata section) : 107kB
+Size of TFLite code (.text section) to do an inference : 84kB - 17.56kB = 66.44kB
+The validation dataset take 100 * 100 * 4 = 40 000 bytes => 39 kB in FLASH (.rodata section).
+
+![Alt text](docs/images/image-3.png)
+![Alt text](docs/images/image-2.png)
+
+Inference time : 35ms
+![Alt text](docs/images/image-5.png)
+
+
+Results of quantize model on target vs on the host :
+
+**Host**
+![Alt text](docs/images/image-4.png)
+
+**Target**
+![Alt text](docs/images/image-6.png)
+
+
+## P_DeployTSAD_h7
+
+This project run on a Nucleo-H7A3ZI-Q and embedds a cortex-M7. There is a 2MB Flash and a 1.4MB RAM.
+
+To measure the STM-HAL memory footprint, it's necessary to replace the define `#define RUN_INFERENCE` by `#define BASELINE_MEMORY_FOOTPRINT` in the main file.
+Then, the memory footprint of TFlite ca be measured with `#define RUN_INFERENCE` or `PROFILE_MEMORY_AND_LATENCY`.
+
+These measures are did with the `gan_0_quant` model.
+
+Baseline memory footprint: 24.39kB of flash, 2.5kB of RAM
+(.text section) in FLASH : 22.27kB
+
+![Alt text](docs/images/image-7.png)
+![Alt text](docs/images/image-9.png)
+
+Size of the temporary memory used by the model in RAM: less than 4096 bytes => 4kB
+Size of the model in Flash (.rodata section) : 107kB
+Size of TFLite code (.text section) to do an inference : 88kB - 24.39kB = 63.61kB
+The validation dataset take 100 * 100 * 4 = 40 000 bytes => 39 kB in FLASH (.rodata section).
+
+![Alt text](docs/images/image-8.png)
+![Alt text](docs/images/image-10.png)
+
+
+Inference time : 25ms
+
+![Alt text](docs/images/image-11.png)
+
+
+Results of quantize model on target vs on the host :
+
+**Host**
+
+![Alt text](docs/images/image-4.png)
+
+**Target**
+
+![Alt text](docs/images/image-12.png)
+
+## P_DeployTSAD_h7 with STMCubeAI
+
+This project run on a Nucleo-H7A3ZI-Q and embedds a cortex-M7. There is a 2MB Flash and a 1.4MB RAM.
+
+The AI model is ported on the target with STCubeAI. The using engine is STRuntime and not TFLite.
+
+These measures are did with the `gan_0_quant` model.
+
+Size of model params in FLASH (.rodata section) : 103kB
+Size of STRuntime code (.text section) : 47kB - 24.39kB = 22.61kB
+Size of the temporary memory used by the model in RAM: less than 4096 bytes => 4kB
+The validation dataset take 100 * 100 * 4 = 40 000 bytes => 39 kB in FLASH (.rodata section).
+
+![Alt text](docs/images/image-13.png)
+![Alt text](docs/images/image-14.png)
+
+
+Inference time : 1ms
+
+Results of quantize model on target vs on the host :
+
+**Host**
+
+![Alt text](docs/images/image-4.png)
+
+**Target**
+
+![Alt text](docs/images/image-15.png)
 

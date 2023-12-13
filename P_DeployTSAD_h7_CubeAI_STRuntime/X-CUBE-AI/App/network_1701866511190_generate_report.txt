@@ -1,21 +1,21 @@
 Neural Network Tools for STM32 family v1.7.0 (stm.ai v8.1.0-19520)
-Created date          : 2023-12-06 13:47:00
-Parameters            : generate --name network_1701866511190 -m C:/Users/robin.frund/Downloads/gan_0_quant.tflite --type tflite --compression none --verbosity 1 --workspace C:\Users\ROBIN~1.FRU\AppData\Local\Temp\mxAI_workspace165347410250000013677649235440742307 --output C:\Users\robin.frund\.stm32cubemx\network_output --allocate-inputs --series stm32h7 --allocate-outputs
+Created date          : 2023-12-13 10:49:25
+Parameters            : generate --name network_1701866511190 -m C:/DEV/AII/TinyML-STM32/output/gan_0_quant.tflite --type tflite --compression none --verbosity 1 --workspace C:\Users\ROBIN~1.FRU\AppData\Local\Temp\mxAI_workspace224761549182600016511827538251325715 --output C:\Users\robin.frund\.stm32cubemx\network_output --allocate-inputs --series stm32h7 --allocate-outputs
 
 Exec/report summary (generate)
 --------------------------------------------------------------------------------------------------------------------
-model file         :   C:\Users\robin.frund\Downloads\gan_0_quant.tflite                                            
+model file         :   C:\DEV\AII\TinyML-STM32\output\gan_0_quant.tflite                                            
 type               :   tflite                                                                                       
 c_name             :   network_1701866511190                                                                        
 compression        :   none                                                                                         
 options            :   allocate-inputs, allocate-outputs                                                            
 optimization       :   balanced                                                                                     
 target/series      :   stm32h7                                                                                      
-workspace dir      :   C:\Users\ROBIN~1.FRU\AppData\Local\Temp\mxAI_workspace165347410250000013677649235440742307   
+workspace dir      :   C:\Users\ROBIN~1.FRU\AppData\Local\Temp\mxAI_workspace224761549182600016511827538251325715   
 output dir         :   C:\Users\robin.frund\.stm32cubemx\network_output                                             
 model_fmt          :   ss/sa per tensor                                                                             
 model_name         :   gan_0_quant                                                                                  
-model_hash         :   9338d397e161973af17109e27ddbaf15                                                             
+model_hash         :   35a9067d169574c1992f6ed632ce21e6                                                             
 params #           :   104,036 items (102.64 KiB)                                                                   
 --------------------------------------------------------------------------------------------------------------------
 input 1/1          :   'serving_default_args_00' (domain:activations/**default**)                                   
@@ -214,19 +214,19 @@ Number of operations per c-layer
 c_id    m_id   name (type)                       #op          type    #param   sparsity 
 ------- ------ --------------------------- --------- ------------- --------- ---------- 
 0       0      conversion_0 (converter)          198   conv_f32_s8           
-1       2      gemm_2 (dense)                 12,800    smul_s8_s8    12,800     0.0163 
-2       3      gemm_3 (dense)                 16,512    smul_s8_s8    16,512     0.0048 
-3       4      gemm_4 (dense)                 16,512    smul_s8_s8    16,512     0.0115 
-4       5      gemm_5 (dense)                 12,771    smul_s8_s8    12,771     0.0066 
+1       2      gemm_2 (dense)                 12,800    smul_s8_s8    12,800     0.0161 
+2       3      gemm_3 (dense)                 16,512    smul_s8_s8    16,512     0.0051 
+3       4      gemm_4 (dense)                 16,512    smul_s8_s8    16,512     0.0134 
+4       5      gemm_5 (dense)                 12,771    smul_s8_s8    12,771     0.0043 
 5       6      nl_6 (nl)                          99      op_s8_s8           
-6       7      gemm_7 (dense)                 12,800    smul_s8_s8    12,800     0.0145 
-7       8      gemm_8 (dense)                 16,512    smul_s8_s8    16,512     0.0044 
-8       9      gemm_9 (dense)                 16,512    smul_s8_s8    16,512     0.0132 
+6       7      gemm_7 (dense)                 12,800    smul_s8_s8    12,800     0.0140 
+7       8      gemm_8 (dense)                 16,512    smul_s8_s8    16,512     0.0042 
+8       9      gemm_9 (dense)                 16,512    smul_s8_s8    16,512     0.0124 
 9       10     gemm_10 (dense)                   129    smul_s8_s8       129     0.0000 
 10      11     nl_11 (nl)                          1      op_s8_s8           
 11      13     conversion_13 (converter)           2   conv_s8_f32           
 ------- ------ --------------------------- --------- ------------- --------- ---------- 
-total                                        104,848                 104,548     0.0099 
+total                                        104,848                 104,548     0.0098 
 
 Number of operation types
 ---------------- --------- ----------- 

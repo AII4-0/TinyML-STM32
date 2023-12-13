@@ -42,9 +42,10 @@
 	#include "lstm_1.h"
 	#include "gan_0_quant.h"
 	#include "gan_0.h"
-	#include "C_1_test.h"
-//	#include "C_1_test_400.h"
-	#include "C_2_test.h"
+//	#include "C_1_test.h"
+	#include "C_1_test_400.h"
+//	#include "C_2_test.h"
+	#include "C_2_test_400.h"
 
 #elif defined( BASELINE_MEMORY_FOOTPRINT )
 	#include <stdio.h>
@@ -60,7 +61,7 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 #if defined( PROFILE_MEMORY_AND_LATENCY ) || defined( RUN_INFERENCE )
-	#define TENSOR_ARENA_SIZE (40 * 1024)
+	#define TENSOR_ARENA_SIZE (4 * 1024)
 	#define N_SAMPLE_PER_INPUT 100
 #endif
 
