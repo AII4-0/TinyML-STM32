@@ -129,7 +129,32 @@ Follow the procedure below to test the model.
     mkdir build
     cd build
 
+    # Compile without GPU support on host
     cmake ../
+    cmake --build . -j
+
+    # Compile with GPU support on host
+    cmake ../ -DTFLITE_ENABLE_GPU=ON
+    cmake --build . -j
+
+    # Compile for ARMv7 NEON enabled
+    curl -LO https://developer.arm.com/-/media/Files/downloads/gnu/11.2-2022.02/binrel/gcc-arm-11.2-2022.02-x86_64-arm-none-linux-gnueabihf.tar.xz
+    mkdir -p ${HOME}/toolchains
+
+    tar xvf gcc-arm-11.2-2022.02-x86_64-arm-none-linux-gnueabihf.tar.xz -C ${HOME}/toolchains
+
+    ARMCC_PREFIX=${HOME}/toolchains/gcc-arm-11.2-2022.02-x86_64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-
+    ARMCC_FLAGS="-march=armv7-a -mfpu=neon-vfpv4 -funsafe-math-optimizations -mfp16-format=ieee"
+
+    cmake -DCMAKE_C_COMPILER=${ARMCC_PREFIX}gcc \
+    -DCMAKE_CXX_COMPILER=${ARMCC_PREFIX}g++ \
+    -DCMAKE_C_FLAGS="${ARMCC_FLAGS}" \
+    -DCMAKE_CXX_FLAGS="${ARMCC_FLAGS}" \
+    -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON \
+    -DCMAKE_SYSTEM_NAME=Linux \
+    -DCMAKE_SYSTEM_PROCESSOR=armv7 \
+    ../
+
     cmake --build . -j
     ```
 3. Test the model
@@ -137,8 +162,7 @@ Follow the procedure below to test the model.
     # ./minimal <model> <index to start inference in C_1_test_400.h>
     ./minimal ../../output/gan_0_quant.tflite 0
     ```
-4. The result must be the same as the result of the `tsad-benchmark/check_tflite_model.py` scipt.
-
+4. The result must be the same as the result of the `tsad-benchmark/check_tflite_model.py` script.
 
 
 ## 3 Generate the TFLiteMicro library for the embedded system
@@ -378,6 +402,41 @@ Results of quantize model on target vs on the host :
 **Target**
 
 ![Alt text](docs/images/image-17.png)
+
+## P_DeployTSAD_host_in_C on the host
+
+The project builded to use GPU, take 6-10ms to do the inference.
+
+![Alt text](docs/images/image-50.png)
+
+The project builded to use CPU, take 400-600us to do the inference.
+
+![Alt text](docs/images/image51.png)
+
+## P_DeployTSAD_host_in_C on RPI4 
+
+Version installed on RPI4 :
+
+![Alt text](docs/images/image-53.png)
+
+The project builded, take ~200us to do the inference.
+
+![Alt text](docs/images/image-52.png)
+
+
+## Resume
+
+| Target            | Details                           | Inference time    |
+| --------          | -------                           | -------           |
+| Host x86          | CPU                               | 6-10 ms           |
+| Host x86          | GPU                               | 400-600 us        |
+| RPI4              | armv7                             | ~200 us           |
+| Nucleo-F411RE     | TFLite Micro                      | 5 ms              |
+| Nucleo-H7A3ZI-Q   | TFLite Micro                      | 4 ms              |
+| Nucleo-H7A3ZI-Q   | STMCubeAI - STMRuntime            | < 1 ms            |
+| Nucleo-H7A3ZI-Q   | STMCubeAI - TFliteMicro Runtime   | < 1 ms            |
+
+The inference time is slower on host, because the model is quantize. On x86, float is better. Reference: https://github.com/tensorflow/tensorflow/issues/30599
 
 
 # Notes

@@ -35,6 +35,10 @@ add_subdirectory(
   EXCLUDE_FROM_ALL
 )
 
+IF(TFLITE_ENABLE_GPU==ON)
+    ADD_DEFINITIONS(-DGPU_ENABLED)
+ENDIF(DEFINE_MACRO)
+
 set(CMAKE_CXX_STANDARD 17)
 add_executable(minimal
   minimal.cc

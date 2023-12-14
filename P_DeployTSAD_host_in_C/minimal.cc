@@ -18,8 +18,12 @@ limitations under the License.
 #include "tensorflow/lite/model.h"
 #include "tensorflow/lite/optional_debug_tools.h"
 
+#include <iostream>
+#include <chrono>
+
 // #include "C_1_test_0.h"
 #include "C_1_test_400.h"
+#include "tensorflow/lite/delegates/gpu/delegate.h"
 
 // This is an example that is minimal to read a model
 // from disk and perform inference.
@@ -55,10 +59,15 @@ int main(int argc, char* argv[]) {
   builder(&interpreter);
   TFLITE_MINIMAL_CHECK(interpreter != nullptr);
 
+  // Use GPU
+  // NEW: Prepare GPU delegate.
+#if defined(GPU_ENABLED)
+    auto* delegate = TfLiteGpuDelegateV2Create(/*default options=*/nullptr);
+    if (interpreter->ModifyGraphWithDelegate(delegate) != kTfLiteOk) return false;
+#else
   // Allocate tensor buffers.
   TFLITE_MINIMAL_CHECK(interpreter->AllocateTensors() == kTfLiteOk);
-  // printf("=== Pre-invoke Interpreter State ===\n");
-  // tflite::PrintInterpreterState(interpreter.get());
+#endif
 
   // Fill input buffers
   float* inputTyped = interpreter->typed_input_tensor<float>(0);
@@ -66,6 +75,7 @@ int main(int argc, char* argv[]) {
   printf("index : %d\n", index);
 
   TfLiteTensor* input = interpreter->input_tensor(0);
+
 
   // Print size of input
   int inputDimSize = input->dims->size;
@@ -76,16 +86,22 @@ int main(int argc, char* argv[]) {
   }
 
   printf("First input value : %f\n", C_1_test[index][0][0]);
-  // memcpy(input->data.f, C_1_test[index][0], (C_1_test_nInputs - 1) * C_1_test_dimension);
   for(int i=0; i<100;i++)
   {
     input->data.f[i] = C_1_test[index][i][0];
   }
 
+
+  // get Time in milliseconds
+  auto start = std::chrono::high_resolution_clock::now();
   // Run inference
   TFLITE_MINIMAL_CHECK(interpreter->Invoke() == kTfLiteOk);
-  // printf("\n\n=== Post-invoke Interpreter State ===\n");
-  // tflite::PrintInterpreterState(interpreter.get());
+  auto end = std::chrono::high_resolution_clock::now();
+  auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+  // printf("Inference time : %l us\n", duration.count());
+  std::cout << "Inference time : " << duration.count() << " us" << std::endl;
+
+
 
   // Read output buffers
   float* outputTyped = interpreter->typed_output_tensor<float>(0);
@@ -95,6 +111,14 @@ int main(int argc, char* argv[]) {
   {
     printf("class %d, score : %f\n", i, output->data.f[i]);
   }
+
+
+#if defined(GPU_ENABLED)
+  // Clean up.
+  TfLiteGpuDelegateV2Delete(delegate);
+  // NEW: Clean up.
+  TfLiteGpuDelegateV2Delete(delegate);
+#endif
 
   return 0;
 }
