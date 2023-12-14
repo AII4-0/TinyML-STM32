@@ -200,7 +200,7 @@ Follow the procedure below to test the model.
     ```
 16. Rename main.c to main.cpp
 17. Build the project
-18. If the flash is too small, add the optimization for size :
+18. To be faster, add the compiler flag `-O3` in **MCU GCC Compiler** and **MCU G++ Compiler**. :
 
     ![Alt text](docs/images/optimize.png)
 
@@ -258,24 +258,27 @@ Baseline memory footprint: 19.33 kB of flash, 2.38 kB of RAM
 ![Alt text](docs/images/image-1.png)
 ![Alt text](docs/images/image.png)
 
-Size of the temporary memory used by the model in RAM: less than 4096 bytes => 4kB
-Size of the model in Flash (.rodata section) : 107kB
-Size of TFLite code (.text section) to do an inference : 84kB - 17.56kB = 66.44kB
+Size of the temporary memory used by the model in RAM: less than 4096 bytes => 4kB \
+Size of the model in Flash (.rodata section) : 107kB \
+Size of TFLite code (.text section) to do an inference : 84kB - 17.56kB = 66.44kB \
 The validation dataset take 100 * 100 * 4 = 40 000 bytes => 39 kB in FLASH (.rodata section).
 
 ![Alt text](docs/images/image-3.png)
 ![Alt text](docs/images/image-2.png)
 
-Inference time : 35ms
+Inference time : 5ms
+
 ![Alt text](docs/images/image-5.png)
 
 
 Results of quantize model on target vs on the host :
 
 **Host**
+
 ![Alt text](docs/images/image-4.png)
 
 **Target**
+
 ![Alt text](docs/images/image-6.png)
 
 
@@ -294,16 +297,16 @@ Baseline memory footprint: 24.39kB of flash, 2.5kB of RAM
 ![Alt text](docs/images/image-7.png)
 ![Alt text](docs/images/image-9.png)
 
-Size of the temporary memory used by the model in RAM: less than 4096 bytes => 4kB
-Size of the model in Flash (.rodata section) : 107kB
-Size of TFLite code (.text section) to do an inference : 88kB - 24.39kB = 63.61kB
+Size of the temporary memory used by the model in RAM: less than 4096 bytes => 4kB \
+Size of the model in Flash (.rodata section) : 107kB \
+Size of TFLite code (.text section) to do an inference : 88kB - 24.39kB = 63.61kB \
 The validation dataset take 100 * 100 * 4 = 40 000 bytes => 39 kB in FLASH (.rodata section).
 
 ![Alt text](docs/images/image-8.png)
 ![Alt text](docs/images/image-10.png)
 
 
-Inference time : 25ms
+Inference time : 4ms
 
 ![Alt text](docs/images/image-11.png)
 
@@ -326,9 +329,9 @@ The AI model is ported on the target with STCubeAI. The using engine is STRuntim
 
 These measures are did with the `gan_0_quant` model.
 
-Size of model params in FLASH (.rodata section) : 103kB
-Size of STRuntime code (.text section) : 47kB - 24.39kB = 22.61kB
-Size of the temporary memory used by the model in RAM: less than 4096 bytes => 4kB
+Size of model params in FLASH (.rodata section) : 103kB \
+Size of STRuntime code (.text section) : 47kB - 24.39kB = 22.61kB \
+Size of the temporary memory used by the model in RAM: less than 4096 bytes => 4kB \
 The validation dataset take 100 * 100 * 4 = 40 000 bytes => 39 kB in FLASH (.rodata section).
 
 ![Alt text](docs/images/image-13.png)
@@ -347,3 +350,36 @@ Results of quantize model on target vs on the host :
 
 ![Alt text](docs/images/image-15.png)
 
+## P_DeployTSAD_h7 with STMCubeAI using TFLiteRuntime
+
+This project run on a Nucleo-H7A3ZI-Q and embedds a cortex-M7. There is a 2MB Flash and a 1.4MB RAM.
+
+The AI model is ported on the target with STCubeAI. The using engine is TFLiteRuntime and not STMCubeRuntime.
+
+These measures are did with the `gan_0_quant` model.
+
+Size of model params in FLASH (.rodata section) : 107kB \
+Size of TFLiteRuntime code (.text section) : 54kB - 24.39kB = 29.61kB \
+Size of the temporary memory used by the model in RAM: less than 4096 bytes => 4kB \
+The validation dataset take 100 * 100 * 4 = 40 000 bytes => 39 kB in FLASH (.rodata section).
+
+![Alt text](docs/images/image16.png)
+![Alt text](docs/images/image-16.png)
+
+
+Inference time : 1ms
+
+Results of quantize model on target vs on the host :
+
+**Host**
+
+![Alt text](docs/images/image-4.png)
+
+**Target**
+
+![Alt text](docs/images/image-17.png)
+
+
+# Notes
+
+[Add DSP support](https://community.st.com/t5/stm32-mcus/configuring-dsp-libraries-on-stm32cubeide/ta-p/49637)

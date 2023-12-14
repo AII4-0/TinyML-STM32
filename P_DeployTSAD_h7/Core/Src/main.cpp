@@ -81,8 +81,24 @@ CRC_HandleTypeDef hcrc;
 UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN PV */
+#define _CONCAT_ARG(a, b)     a ## b
+#define _CONCAT(a, b)         _CONCAT_ARG(a, b)
+
+#if defined(_MSC_VER)
+  #define MEM_ALIGNED(x)
+#elif defined(__ICCARM__) || defined (__IAR_SYSTEMS_ICC__)
+  #define MEM_ALIGNED(x)         _CONCAT(MEM_ALIGNED_,x)
+  #define MEM_ALIGNED_16         _Pragma("data_alignment = 16")
+#elif defined(__CC_ARM)
+  #define MEM_ALIGNED(x)         __attribute__((aligned (x)))
+#elif defined(__GNUC__)
+  #define MEM_ALIGNED(x)         __attribute__((aligned(x)))
+#else
+  #define MEM_ALIGNED(x)
+#endif
+
 #if defined( PROFILE_MEMORY_AND_LATENCY ) || defined( RUN_INFERENCE )
-	uint8_t tensor_arena[TENSOR_ARENA_SIZE];
+	static uint8_t tensor_arena[TENSOR_ARENA_SIZE] MEM_ALIGNED(16);
 #endif
 
 /* USER CODE END PV */
@@ -246,7 +262,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLM = 1;
   RCC_OscInitStruct.PLL.PLLN = 70;
   RCC_OscInitStruct.PLL.PLLP = 2;
-  RCC_OscInitStruct.PLL.PLLQ = 4;
+  RCC_OscInitStruct.PLL.PLLQ = 8;
   RCC_OscInitStruct.PLL.PLLR = 2;
   RCC_OscInitStruct.PLL.PLLRGE = RCC_PLL1VCIRANGE_3;
   RCC_OscInitStruct.PLL.PLLVCOSEL = RCC_PLL1VCOWIDE;
@@ -322,7 +338,7 @@ static void MX_USART3_UART_Init(void)
 
   /* USER CODE END USART3_Init 1 */
   huart3.Instance = USART3;
-  huart3.Init.BaudRate = 9600;
+  huart3.Init.BaudRate = 115200;
   huart3.Init.WordLength = UART_WORDLENGTH_8B;
   huart3.Init.StopBits = UART_STOPBITS_1;
   huart3.Init.Parity = UART_PARITY_NONE;
