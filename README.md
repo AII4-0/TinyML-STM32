@@ -413,13 +413,13 @@ The project builded to use CPU, take 6-10ms to do the inference with the quantiz
 
 ![Alt text](docs/images/image-50.png)
 
-![Alt text](image.png)
+![Alt text](docs/images/image63.png)
 
 The project builded to use GPU, take 400-600us to do the inference with the quantize model and 15-100us with fp32 model.
 
 ![Alt text](docs/images/image51.png)
 
-![Alt text](image-1.png)
+![Alt text](docs/images/image-61.png)
 
 ## P_DeployTSAD_host_in_C on RPI4 
 
@@ -431,7 +431,7 @@ The project builded, take ~200us to do the inference with the quantize model and
 
 ![Alt text](docs/images/image-52.png)
 
-![Alt text](image-2.png)
+![Alt text](docs/images/image-62.png)
 
 
 ## Resume
