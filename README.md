@@ -409,13 +409,17 @@ Results of quantize model on target vs on the host :
 
 ## P_DeployTSAD_host_in_C on the host
 
-The project builded to use GPU, take 6-10ms to do the inference.
+The project builded to use CPU, take 6-10ms to do the inference with the quantize model and 50-300us with fp32 model.
 
 ![Alt text](docs/images/image-50.png)
 
-The project builded to use CPU, take 400-600us to do the inference.
+![Alt text](image.png)
+
+The project builded to use GPU, take 400-600us to do the inference with the quantize model and 15-100us with fp32 model.
 
 ![Alt text](docs/images/image51.png)
+
+![Alt text](image-1.png)
 
 ## P_DeployTSAD_host_in_C on RPI4 
 
@@ -423,18 +427,23 @@ Version installed on RPI4 :
 
 ![Alt text](docs/images/image-53.png)
 
-The project builded, take ~200us to do the inference.
+The project builded, take ~200us to do the inference with the quantize model and 250-300us with fp32 model.
 
 ![Alt text](docs/images/image-52.png)
+
+![Alt text](image-2.png)
 
 
 ## Resume
 
 | Target            | Details                           | Inference time    |
 | --------          | -------                           | -------           |
-| Host x86          | CPU                               | 6-10 ms           |
-| Host x86          | GPU                               | 400-600 us        |
-| RPI4              | armv7                             | ~200 us           |
+| Host x86          | CPU - quantized                   | 6-10 ms           |
+| Host x86          | CPU - fp32                        | 50-300 us         |
+| Host x86          | GPU - quantized                   | 400-600 us        |
+| Host x86          | GPU - fp32                        | 15-100 us         |
+| RPI4              | armv7 - quantized                 | ~200 us           |
+| RPI4              | armv7 - fp32                      | 250-300 us        |
 | Nucleo-F411RE     | TFLite Micro                      | 5 ms              |
 | Nucleo-H7A3ZI-Q   | TFLite Micro                      | 4 ms              |
 | Nucleo-H7A3ZI-Q   | STMCubeAI - STMRuntime            | < 1 ms            |
