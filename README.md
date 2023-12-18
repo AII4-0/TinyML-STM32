@@ -449,7 +449,7 @@ The project builded, take ~200us to do the inference with the quantize model and
 | Nucleo-H7A3ZI-Q   | STMCubeAI - STMRuntime            | < 1 ms            |
 | Nucleo-H7A3ZI-Q   | STMCubeAI - TFliteMicro Runtime   | < 1 ms            |
 
-The inference time is slower on host, because the model is quantize. On x86, float is better. Reference: https://github.com/tensorflow/tensorflow/issues/30599
+The inference time is slower on host, because the model is quantize. On x86, float is better. Reference: https://github.com/tensorflow/tensorflow/issues/21698#issuecomment-414764709
 
 
 # Notes
