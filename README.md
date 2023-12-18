@@ -192,45 +192,48 @@ Follow the procedure below to test the model.
 6. The configuration perspective open it. Go to the Clock configuration tab and set the clock to the max (100MHz)
 
     ![Alt text](docs/images/clock.png)
-7. Save and generate the new C code.
-8. Right click on the project and create a new folder named **tensorflow_lite**.
+
+7. Activate CPU cache (ICache, DCache), if available.
+ 
+8. Save and generate the new C code.
+9.  Right click on the project and create a new folder named **tensorflow_lite**.
 
     ![Alt text](docs/images/folder.png)
-9. Copy the content of the folder `/tmp/tflm-tree`, generated on the section [2 Generate the TFLiteMicro library for the embedded system](##-2-Generate-the-TFLiteMicro-library-for-the-embedded-system).
+10. Copy the content of the folder `/tmp/tflm-tree`, generated on the section [2 Generate the TFLiteMicro library for the embedded system](##-2-Generate-the-TFLiteMicro-library-for-the-embedded-system).
 
     ```bash
     cp -r /tmp/tflm-tree/* P_DeployTSAD/tensorflow_lite
     ```
-10. Include Headers and source in build process. Go to project > Properties. Then, go to C/C++ General> Paths and Symbols > Includes tab > GNU C. Click Add. In the pop-up, click workspace. Select the tensorflow_lite directoy in your project. CHeck Add to all configurations and Add to all languages. Repeat the last two step to iclude directories show in the figure below.
+11. Include Headers and source in build process. Go to project > Properties. Then, go to C/C++ General> Paths and Symbols > Includes tab > GNU C. Click Add. In the pop-up, click workspace. Select the tensorflow_lite directoy in your project. CHeck Add to all configurations and Add to all languages. Repeat the last two step to iclude directories show in the figure below.
 
     ![Alt text](docs/images/include.png)
-11. Include the tensorflow_lite directory in the Source Location
+12. Include the tensorflow_lite directory in the Source Location
 
     ![Alt text](docs/images/source.png)
-12. In Settings > MCU Settings, check the option **Use float with printf from newlib-nano**. It's needed to print float values.
+13. In Settings > MCU Settings, check the option **Use float with printf from newlib-nano**. It's needed to print float values.
 
     ![Alt text](<docs/images/MCU settings.png>)
-13. Add the compiler option `CMSIS_NN`, `ARMCM4`, `CMSIS_DEVICE_ARM_CORTEX_M_XX_HEADER_FILE`, `CPU_M4`, `TF_LITE_DISABLE_X86_NEON`, `TF_LITE_MCU_DEBUG_LOG`, `TF_LITE_STATIC_MEMORY` and `USE_HAL_DRIVER`. Check **Add to all configurations** and **Add to all languages**.
+14. Add the compiler option `CMSIS_NN`, `ARMCM4`, `CMSIS_DEVICE_ARM_CORTEX_M_XX_HEADER_FILE`, `CPU_M4`, `TF_LITE_DISABLE_X86_NEON`, `TF_LITE_MCU_DEBUG_LOG`, `TF_LITE_STATIC_MEMORY` and `USE_HAL_DRIVER`. Check **Add to all configurations** and **Add to all languages**.
 
     ![Alt text](docs/images/CMSIS.png)
 
-14. Add the compiler flag `MD` in **MCU GCC Assembler**, **MCU GCC Compiler** and **MCU G++ Compiler**
+15. Add the compiler flag `MD` in **MCU GCC Assembler**, **MCU GCC Compiler** and **MCU G++ Compiler**
 
     ![Alt text](docs/images/mdFlag.png)
 
-15. Modify the function `ticks_per_second()` of the file `P_DeployTSAD_h7\tensorflow_lite\tensorflow\lite\micro\cortex_m_generic\micro_time.cc`. It depends of the clock speed.
+16. Modify the function `ticks_per_second()` of the file `P_DeployTSAD_h7\tensorflow_lite\tensorflow\lite\micro\cortex_m_generic\micro_time.cc`. It depends of the clock speed.
     ```c
     uint32_t ticks_per_second() { return SystemCoreClock; }
     ```
-16. Rename main.c to main.cpp
-17. Build the project
-18. To be faster, add the compiler flag `-O3` in **MCU GCC Compiler** and **MCU G++ Compiler**. :
+17. Rename main.c to main.cpp
+18. Build the project
+19. To be faster, add the compiler flag `-O3` in **MCU GCC Compiler** and **MCU G++ Compiler**. :
 
     ![Alt text](docs/images/optimize.png)
 
-19. Implement your application and add model + data (gan_0_quant.cpp, gan_0_quant.h, C_1_test.h) in the project.
+20. Implement your application and add model + data (gan_0_quant.cpp, gan_0_quant.h, C_1_test.h) in the project.
 
-20. Follow the same procedure for the Nucleo-H7a3ZI-Q.
+21. Follow the same procedure for the Nucleo-H7a3ZI-Q.
 
 ## 5 Create a project with STMCubeAI
 
@@ -311,7 +314,7 @@ Results of quantize model on target vs on the host :
 This project run on a Nucleo-H7A3ZI-Q and embedds a cortex-M7. There is a 2MB Flash and a 1.4MB RAM.
 
 To measure the STM-HAL memory footprint, it's necessary to replace the define `#define RUN_INFERENCE` by `#define BASELINE_MEMORY_FOOTPRINT` in the main file.
-Then, the memory footprint of TFlite ca be measured with `#define RUN_INFERENCE` or `PROFILE_MEMORY_AND_LATENCY`.
+Then, the memory footprint of TFLite can be measured with `#define RUN_INFERENCE` or `PROFILE_MEMORY_AND_LATENCY`.
 
 These measures are did with the `gan_0_quant` model.
 
@@ -330,7 +333,8 @@ The validation dataset take 100 * 100 * 4 = 40 000 bytes => 39 kB in FLASH (.rod
 ![Alt text](docs/images/image-10.png)
 
 
-Inference time : 4ms
+Inference time : 1-2 ms \
+In the image below, the inference has taken 1.02 ms.
 
 ![Alt text](docs/images/image-11.png)
 
@@ -362,7 +366,7 @@ The validation dataset take 100 * 100 * 4 = 40 000 bytes => 39 kB in FLASH (.rod
 ![Alt text](docs/images/image-14.png)
 
 
-Inference time : 1ms
+Inference time : 1-2 ms
 
 Results of quantize model on target vs on the host :
 
@@ -391,7 +395,7 @@ The validation dataset take 100 * 100 * 4 = 40 000 bytes => 39 kB in FLASH (.rod
 ![Alt text](docs/images/image-16.png)
 
 
-Inference time : 1ms
+Inference time : 1-2 ms
 
 Results of quantize model on target vs on the host :
 
