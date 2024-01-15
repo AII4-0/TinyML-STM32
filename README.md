@@ -445,7 +445,7 @@ The project builded, take ~200us to do the inference with the quantize model and
 | RPI4              | armv7 - quantized                 | ~200 us           |
 | RPI4              | armv7 - fp32                      | 250-300 us        |
 | Nucleo-F411RE     | TFLite Micro                      | 5 ms              |
-| Nucleo-H7A3ZI-Q   | TFLite Micro                      | 4 ms              |
+| Nucleo-H7A3ZI-Q   | TFLite Micro                      | < 1 ms              |
 | Nucleo-H7A3ZI-Q   | STMCubeAI - STMRuntime            | < 1 ms            |
 | Nucleo-H7A3ZI-Q   | STMCubeAI - TFliteMicro Runtime   | < 1 ms            |
 
